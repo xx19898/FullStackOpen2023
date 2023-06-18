@@ -1,0 +1,21 @@
+
+body{
+    padding:0;
+    margin:0;
+    font-family:'Montserrat'
+    
+}
+
+.main{
+    width: 100%;
+    background:linear-gradient(90deg, rgba(252,231,255,1) 6%, rgba(116,189,183,1) 27%, rgba(249,0,186,1) 100%);
+
+    margin:0;
+    padding:0;
+    min-height: 100vh;
+    height: auto;
+    display:flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+}

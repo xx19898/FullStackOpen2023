@@ -32,8 +32,6 @@ const App = () => {
 
   let mostPopularAnecdote = 0
   
-  console.log({votesObject})
-
   votesObject.forEach( (numberVotes,index) => {
     if(numberVotes > votesObject[mostPopularAnecdote]) mostPopularAnecdote = index
   })
