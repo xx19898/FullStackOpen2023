@@ -23,7 +23,7 @@ const blogSchema = mongoose.Schema({
     })
   }
 
-  async function createBlog(newBlog){
+  function createBlog(newBlog){
     const blog = new Blog(newBlog)
 
     return blog
