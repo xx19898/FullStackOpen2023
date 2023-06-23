@@ -8,19 +8,24 @@ const url = `mongodb+srv://phonebookUser:${password}@cluster0.czyxxd4.mongodb.ne
 mongoose.set('strictQuery',false)
 mongoose.connect(url).then((x) => console.log('CONNECTED TO DB')).catch((e) => console.log('ERROR WHILE TRYING TO CONNECT TO THE DB'))
 
-const blogSchema = mongoose.Schema({
-    title: String,
-    author: String,
-    url: String,
-    likes: Number
-  })
+  const blogSchema = mongoose.Schema({
+      title: String,
+      author: String,
+      url: String,
+      likes: Number
+    })
+
+  const userSchema = mongoose.Schema({
+    username: String,
+    name: String,
+    password: String
+  }) 
   
   const Blog = mongoose.model('Blog', blogSchema)
+  const User = mongoose.model('User',userSchema)
 
   function getBlogs(){
-    return Blog.find({}).then(blogs => {
-      return blogs
-    })
+    return Blog.find({})
   }
 
   function createBlog(newBlog){
@@ -28,9 +33,15 @@ const blogSchema = mongoose.Schema({
 
     return blog
         .save()
-        .then(result => {
-        return result
-        })
     }
 
-  module.exports = {getBlogs,createBlog}
+    function createNewUser(newUser){
+      const user = new User(newUser)
+      return user.save()
+    }
+
+    function getUsers(){
+      return User.find({})
+    }
+
+  module.exports = {getBlogs,createBlog,createNewUser,getUsers}

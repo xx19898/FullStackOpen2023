@@ -4,24 +4,17 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const { getBlogs, createBlog } = require('./mongo')
+const { getUserBlogs, createNewBlog } = require('./blogHandlers')
 
 
 
 app.use(cors())
 app.use(express.json())
 
-app.get('/api/blogs', async (request, response) => {
-   const blogs = await getBlogs()
-   response.json(blogs)
-})
+app.get('/api/blogs', getUserBlogs)
+app.post('/api/blogs', createNewBlog)
 
-app.post('/api/blogs', async (request, response) => {
-  
-
-  const savedBlog = await createBlog(request.body)
-
-  response.status(201).json(savedBlog)
-})
+app.post('/api/users',createNewUser)
 
 const PORT = 3003
 app.listen(PORT, () => {

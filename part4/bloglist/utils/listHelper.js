@@ -49,5 +49,5 @@ const mostLikes = (blogs) => {
     return {author: sortedArray[0].author, likes: sortedArray[0].likes}
 }
 
-module.exports = {dummy,likeCountHelper,mostBlogs,mostLikes}
+module.exports = {dummy, likeCountHelper, mostBlogs, mostLikes}
 
