@@ -1,13 +1,17 @@
 const mongoose = require('mongoose')
 const process = require('process')
-require('dotenv').config()
 
-const password = process.env.dbPassword
-const url = `mongodb+srv://phonebookUser:${password}@cluster0.czyxxd4.mongodb.net/BloglistDB?retryWrites=true&w=majority`
+async function connectDB(){
+  mongoose.set('strictQuery',false)
+  const theUrl = process.env.db_url
+  console.log({theUrl})
+  await mongoose.connect(theUrl).then((x) => console.log('CONNECTED TO DB')).catch((e) => console.log('ERROR WHILE TRYING TO CONNECT TO THE DB'))
+}
 
-mongoose.set('strictQuery',false)
-mongoose.connect(url).then((x) => console.log('CONNECTED TO DB')).catch((e) => console.log('ERROR WHILE TRYING TO CONNECT TO THE DB'))
-
+async function disconnectDB(){
+  await mongoose.connection.close()
+  console.log('DISCONNECTED FROM DATABASE')
+}
   const blogSchema = mongoose.Schema({
       title: String,
       author: String,
@@ -27,21 +31,37 @@ mongoose.connect(url).then((x) => console.log('CONNECTED TO DB')).catch((e) => c
   function getBlogs(){
     return Blog.find({})
   }
-
+  
   function createBlog(newBlog){
     const blog = new Blog(newBlog)
 
     return blog
         .save()
-    }
+  }
 
-    function createNewUser(newUser){
-      const user = new User(newUser)
-      return user.save()
-    }
+  function deleteBlogs(){
+    return Blog.deleteMany({})
+  }
 
-    function getUsers(){
-      return User.find({})
-    }
+  function getUserByName(name){
+    return User.findOne({username:name})
+  }
 
-  module.exports = {getBlogs,createBlog,createNewUser,getUsers}
+  function deleteUsers(){
+    return User.deleteMany({})
+  }
+
+  function deleteUserByName(name){
+    return User.deleteOne({name:name})
+  }
+
+  function createNewUser(newUser){
+    const user = new User(newUser)
+    return user.save()
+  }
+
+  function getUsers(){
+    return User.find({})
+  }
+
+  module.exports = {deleteBlogs,deleteUsers,getBlogs,createBlog,disconnectDB,connectDB,createNewUser,getUsers,getUserByName,deleteUserByName}
