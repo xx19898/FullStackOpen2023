@@ -19,11 +19,9 @@ async function createNewUserHandler(request,response){
 
     async function loginUserHandler(request,response){
         const userdata = request.body
-        console.log({userdata})
         const err = validateFormOfUserData(request.body)
         if(err.error != undefined) response.status(400).json(err.error)
         user = await getUserByName(userdata.username)
-        console.log({user})
         if(!passwordMatch(userdata.password,user.password)) return response.status(401).json({
         error: 'invalid username or password'
         })
@@ -34,8 +32,9 @@ async function createNewUserHandler(request,response){
         }
 
         const token = jwt.sign(userForToken, process.env.JWT_SECRET)
+        
 
-        response.status(200).send({token, username: user.username, name: user.name})
+        response.status(200).send({token:token, username: user.username, name: user.name})
     }
 
 function encryptPassword(password){
@@ -47,7 +46,7 @@ function encryptPassword(password){
 async function validateUserDataForRegistering(userdata){
     validateFormOfUserData(userdata)
     const existingUser = await getUserByName(userdata.username)
-    if(existingUser != undefined || existingUser.length > 0) return {error:'Username is already taken'}
+    if(existingUser != undefined) return {error:'Username is already taken'}
     return {}
 }
 
@@ -58,9 +57,13 @@ function validateFormOfUserData(userdata){
     return {}
 }
 
+function verifyToken(token){
+    return jwt.verify(token,process.env.JWT_SECRET)
+}
+
 
 function passwordMatch(plainPassword,hash){
     return bcrypt.compareSync(plainPassword,hash)
 }
 
-module.exports = {createNewUserHandler,loginUserHandler,}
+module.exports = {createNewUserHandler,loginUserHandler,verifyToken}

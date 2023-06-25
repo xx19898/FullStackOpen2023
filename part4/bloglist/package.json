@@ -8,7 +8,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "dotenv -e .env.test nodemon index.js",
-    "test": "dotenv -e .env.test jest --verbose"
+    "test": "dotenv -e .env.test jest --verbose --maxWorkers=1 --detectOpenHandles"
   },
   "author": "",
   "license": "ISC",

@@ -40,22 +40,21 @@ describe('testing that registration of newUsers works as it should',() => {
         await disconnectDB()
     })
     beforeAll(async () => {
-        await connectDB('test')
+        await connectDB()
     })
 
-    test('creating user should work', async () => {
+    test.only('creating user should work', async () => {
         const response = await request(app).post('/api/users').send({password:'xddd',username:'testUser',name:'Adam'})
         expect(response.statusCode).toBe(201)
     })
 
-    test.only('created user exists inside database', async () => {
+    test('created user exists inside database', async () => {
         const user = await getUserByName('testUser')
         expect(user.name).toBe('Adam')
     })
 
     test('should be able to login with right credentials',async() => {
         const response = await request(app).post('/api/users/login').send({username:'testUser',password:'xddd'})
-        console.log({response})
         expect(response.statusCode).toBe(200)
     })
 })
