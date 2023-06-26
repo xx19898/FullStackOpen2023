@@ -8,16 +8,15 @@ async function getUserBlogs(request, response){
  }
 
  async function createNewBlogHandler(request, response){
-   console.log('GOT HERE')
    const jwtToken = request.token
    try{
       const payload = verifyToken(jwtToken)
+      console.log({payload})
       const username = payload.username
       const blog = request.body.blog
       const savedBlog = await addBlog(username,blog)
       response.status(201).json(savedBlog)
    }catch(e){
-      console.log('GOT HERE')
       console.log({errormessage:e.message})
       response.status(500).json(e.message)
    }

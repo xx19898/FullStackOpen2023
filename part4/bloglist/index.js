@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const { getBlogs, createBlog, createNewUser, connectDB } = require('./mongo')
 const { getUserBlogs, createNewBlogHandler } = require('./blogHandlers')
 const { createNewUserHandler, loginUserHandler } = require('./authHandlers')
-const { tokenExtractor, tokenValidator, userExtractor } = require('../../middleware')
+const { tokenExtractor, tokenValidator, userExtractor } = require('./middleware')
 
 app.use(cors())
 app.use(express.json())
@@ -24,8 +24,6 @@ if(process.env.NODE_ENV !== 'test'){
     connectDB()
     console.log(`Server running on port ${PORT}`)
   })
-}else{
-  connectDB()
 }
 
 module.exports = { app } 

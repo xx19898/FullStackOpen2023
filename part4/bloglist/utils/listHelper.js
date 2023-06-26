@@ -31,8 +31,6 @@ const mostBlogs = (blogs,parameter) => {
         else if(a[1] < b[1]) return 1
         return 0
     })
-
-    console.log({sortedArr})
     return {author: sortedArr[0][0],blogs: sortedArr[0][1]}
 }
 

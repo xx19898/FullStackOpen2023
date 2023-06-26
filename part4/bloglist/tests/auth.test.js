@@ -1,49 +1,25 @@
+const { default: mongoose } = require("mongoose");
 const { app } = require("..");
 const { deleteUserByName, connectDB, disconnectDB, deleteUsers, deleteBlogs, getUserByName } = require("../mongo")
 
 const request = require('supertest');
+const process = require('process')
 
-/*
-describe('testing that registration of newUsers works as it should',() => {
-    afterEach(async() => {
-        console.log('done did it')
-    })
-    beforeAll(async () => {
-        await connectDB('test')
-    })
-    afterAll(async () => {
-        await disconnectDB()
-    })
-    test('server should not accept userdata with no username', async () => {
-        const response = await request(app).post('/api/users').send({password:'xddd'})
-        expect(response.statusCode).toBe(400)
-    })
-    test('server should not accept userdata with no password',async () => {
-        const response = await request(app).post('/api/users').send({username:'xesewr'})
-        expect(response.statusCode).toBe(400)
-    })
-    test('server should not accept too short password',async () => {
-        const response = await request(app).post('/api/users').send({username:'xesewr',password:'xd'})
-        expect(response.statusCode).toBe(400)
-    })
-    test('server should not accept too short username',async () => {
-        const response = await request(app).post('/api/users').send({username:'x',password:'xdsssdf'})
-        expect(response.statusCode).toBe(400)
-    })
-})
-*/
 
-describe('testing that registration of newUsers works as it should',() => {
+describe('testing that registration and authentication of newUsers works as it should',() => {
+    
     afterAll(async() => {
-        await deleteUsers()
         await deleteBlogs()
+        await deleteUsers() 
         await disconnectDB()
+        console.log('FINISHED WITH AUTH TESTS')
     })
+    
     beforeAll(async () => {
         await connectDB()
     })
 
-    test.only('creating user should work', async () => {
+    test('creating user should work', async () => {
         const response = await request(app).post('/api/users').send({password:'xddd',username:'testUser',name:'Adam'})
         expect(response.statusCode).toBe(201)
     })

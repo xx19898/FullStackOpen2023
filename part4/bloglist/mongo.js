@@ -4,13 +4,15 @@ const process = require('process')
 async function connectDB(){
   mongoose.set('strictQuery',false)
   const theUrl = process.env.db_url
-  await mongoose.connect(theUrl).catch((e) => console.log('ERROR WHILE TRYING TO CONNECT TO THE DB'))
+  console.log({DB_URL:theUrl})
+  await mongoose.connect(theUrl).then(() => console.log('Connected to the Database!')).catch((e) => console.log('ERROR WHILE TRYING TO CONNECT TO THE DB'))
 }
 
-async function disconnectDB(){
-  await mongoose.connection.close()
-  //console.log('DISCONNECTED FROM DATABASE')
+function disconnectDB(){
+  return mongoose.disconnect().then(() => console.log('Disconnected from Database'))
 }
+
+
   const blogSchema = mongoose.Schema({
       title: String,
       author: String,
@@ -40,6 +42,10 @@ async function disconnectDB(){
   function getBlogs(){
     return Blog.find({}).populate('user',{username:1,name:1,_id:1})
   }
+
+  function getBlogById(id){
+    return Blog.find({'_id':id}).populate('user',{username:1,name:1,_id:1})
+  }
   
   function createBlog(newBlog){
     const blog = new Blog(newBlog)
@@ -61,6 +67,7 @@ async function disconnectDB(){
   }
 
   function getUserByName(name){
+    console.log({lookingForUser:name})
     return User.findOne({username:name})
   }
 
@@ -78,14 +85,13 @@ async function disconnectDB(){
   }
 
   async function addBlog(username,blog){
-    const user = await User.findOne({username:username})
-    console.log({user})
-    console.log({blog})
-    let newBlog = new Blog({...blog,user:user._id})
+    const user = await getUserByName(username)
+    let newBlog = new Blog({...blog,user:user.id})
     newBlog = await newBlog.save()
-    user.blogs = user.blogs.concat(blog._id)
-    const savedBlog = await user.save()
-    return savedBlog
+    let newBlogFromDB = await getBlogById(newBlog._id)
+    user.blogs = user.blogs.concat(newBlog._id)
+    const savedUser = await user.save()
+    return newBlog
   }
 
   function getUsers(){
