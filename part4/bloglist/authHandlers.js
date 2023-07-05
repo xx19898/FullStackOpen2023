@@ -21,7 +21,6 @@ async function createNewUserHandler(request,response){
     async function loginUserHandler(request,response){
         const userdata = request.body
         const err = validateFormOfUserData(request.body)
-        console.log({SERVER_ERROR:err.error})
         if(err.error != undefined) response.status(400).json(err.error)
         else{
             user = await getUserByName(userdata.username)

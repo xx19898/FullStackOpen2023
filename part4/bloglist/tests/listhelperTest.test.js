@@ -76,7 +76,7 @@ describe('testing list helper functions', () => {
         expect(result).toEqual({author:"Robert C. Martin",blogs:3})
     })
 
-    test.only('most likes produces correct result',() => {
+    test('most likes produces correct result',() => {
         const result = mostLikes(testBlogs)
         expect(result).toEqual({author:"Edsger W. Dijkstra",likes:17})
     })
