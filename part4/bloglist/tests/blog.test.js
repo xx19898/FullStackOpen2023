@@ -1,4 +1,4 @@
-const { createNewBlog } = require("../blogHandlers")
+const { createNewBlogHandler } = require("../blogHandlers")
 const { deleteUsers, deleteBlogs, disconnectDB, connectDB } = require("../mongo")
 const { app } = require("..");
 const mongoose = require('mongoose')
@@ -21,7 +21,7 @@ describe('testing api functionality related to blog creation and retrieval',() =
     test('should be able to create blog when using correct token',async() => {
         let response = await request(app).post('/api/users/login').send({username:'testUser',password:'xddd'})
         response = await request(app)
-        .post('/api/blogs',createNewBlog)
+        .post('/api/blogs',createNewBlogHandler)
         .set('Authorization',`Bearer ${response.body.token}`)
         .send({blog:{title:'First Blog',author:'random user',url:'xx',likes:15}})
         expect(response.statusCode).toBe(201)
@@ -32,8 +32,8 @@ describe('testing api functionality related to blog creation and retrieval',() =
         let token = await request(app).post('/api/users/login').send({username:'testUser',password:'xddd'})
         console.log({tokenResponse:token.body.token})
         let response = await request(app)
-        .post('/api/blogs',createNewBlog)
-        .set('Authorization',`Bearer ${token}`)
+        .post('/api/blogs',createNewBlogHandler)
+        .set('Authorization',`Bearer ${token.body.token}`)
         .send({token:token.body.token,blog:{title:'First Blog',author:'random user',url:'xx',likes:15}})
         console.log({DELETE_RESPONSE_BODY: response.body})
         expect(response.status).toBe(201)
