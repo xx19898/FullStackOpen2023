@@ -35,6 +35,11 @@
   gap: 4rem;
 }
 
+.notification-body{
+  
+  border-radius:15px;
+}
+
 .blog{
   background: #dc6087;
   display:flex;

@@ -26,22 +26,25 @@ function App(){
       {
         notificationActive ? <Notification text={notificationText}/> : null
       }
-      
-      <form onSubmit={(e) => {
-        e.preventDefault()
-        handleSubmit()
-        console.log('SUBMITTED')
-        }} className="form">
-        <label>Username</label><input onChange={(e) => setUsername(e.target.value)}></input>
-        <label>Password</label><input type="password" onChange={(e) => setPassword(e.target.value)}></input>
-        <button type="submit" className="login-button">Login</button>
-      </form>
+      {
+        loginState  === 'success' ? <button onClick={() => logout()}>Log out</button>
+        :
+        <form onSubmit={(e) => {
+          e.preventDefault()
+          handleSubmit()
+          console.log('SUBMITTED')
+          }} className="form">
+          <label>Username</label><input onChange={(e) => setUsername(e.target.value)}></input>
+          <label>Password</label><input type="password" onChange={(e) => setPassword(e.target.value)}></input>
+          <button type="submit" className="login-button">Login</button>
+        </form> 
+      }
       {
         loginState === 'success' 
         ? 
         <>
         <UserInfo blogs={blogs} userInfo={loggedInInfo}/>
-        <BlogCreationForm refetchBlogs={refetchBlogs} createBlog={createBlog} token={loggedInInfo.token} username={loggedInInfo.username}/>
+        <BlogCreationForm refetchBlogs={refetchBlogs} showNotification={showNotification} createBlog={createBlog} token={loggedInInfo.token} username={loggedInInfo.username}/>
         </>
         : <p>Login unsuccessful,please check your credentials</p>
       }
@@ -59,12 +62,14 @@ function App(){
       setLoginState('success')
       console.log({response:response.data})
       setLoggedInInfo({token:response.data.token,username:response.data.username})
+      showNotification('Login successful','success')
     }else{
       setLoginState('failed')
-      showNotification('Login failed, please check your credentials')
+      showNotification('Login failed, please check your credentials','failure')
     }
     }catch(e){
       console.log({error:e.message})
+      showNotification(e.message)
     }
   }
 
@@ -114,7 +119,13 @@ function App(){
       setNotificationText(text)
       setNotificationActive(true)
       setTimeout(() => setNotificationActive(false),4000)
+  }
 
+  async function logout(){
+    setLoginState('inProcess')
+    setUsername('')
+    setPassword('')
+    setLoggedInInfo({username:null,token:null})
   }
 }
 
