@@ -1,0 +1,52 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.form{
+  display:grid;
+  grid-columns:2
+  grid-rows:2;
+}
+
+.blog-creation-form{
+  display:grid;
+  grid-columns:2
+  grid-rows:2;
+}
+
+.label{
+  grid-column-start:0;
+}
+.input{
+  .grid-column-start:1;
+}
+
+.blog-list{
+  border-radius: 15px;
+  background:#ffcadb;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:1em;
+  gap: 4rem;
+}
+
+.blog{
+  background: #dc6087;
+  display:flex;
+  border-radius:15px;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:1em;
+  gap: 10px;
+  width: 60%
+}
+
+.login-button{
+  margin-top: 2em;
+}
