@@ -11,7 +11,7 @@ describe('testing that registration and authentication of newUsers works as it s
     afterAll(async() => {
         await deleteBlogs()
         await deleteUsers() 
-        await disconnectDB()
+        //await disconnectDB()
         console.log('FINISHED WITH AUTH TESTS')
     })
     

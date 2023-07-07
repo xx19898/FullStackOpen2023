@@ -9,7 +9,7 @@ async function connectDB(){
 }
 
 async function disconnectDB(){
-  await mongoose.connection.close().then(() => console.log('Disconnected from Database'))
+  await mongoose.disconnect()
 }
 
 
@@ -93,6 +93,13 @@ async function disconnectDB(){
     const savedUser = await user.save()
     return newBlog
   }
+  async function findAndUpdateBlog(newBlog,id){
+    console.log({newBlog})
+    const newDoc = await Blog.findOneAndUpdate({_id:id},newBlog,{
+      new:true
+    })
+    return newDoc
+  }
 
   function getUsers(){
     return User.find({}).populate('blogs')
@@ -101,5 +108,6 @@ async function disconnectDB(){
   module.exports = {
     deleteBlogs,deleteUsers,getBlogs,createBlog,
     disconnectDB,connectDB,createNewUser,getUsers,
-    getUserByName,deleteUserByName,addBlog,deleteBlog
+    getUserByName,deleteUserByName,addBlog,deleteBlog,
+    findAndUpdateBlog
   }

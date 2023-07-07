@@ -10,7 +10,8 @@ describe('testing that validation of user input when trying to login is correct'
     })
 
     afterAll(async () => {
-        await disconnectDB()
+        //await disconnectDB()
+        console.log('finished')
     })
 
     test('server should not accept userdata with no username', async () => {

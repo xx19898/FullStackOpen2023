@@ -4,7 +4,7 @@ const app = express()
 const cors = require('cors')
 const mongoose = require('mongoose')
 const { getBlogs, createBlog, createNewUser, connectDB } = require('./mongo')
-const { getUserBlogs, createNewBlogHandler } = require('./blogHandlers')
+const { getUserBlogs, createNewBlogHandler, updateBlog } = require('./blogHandlers')
 const { createNewUserHandler, loginUserHandler } = require('./authHandlers')
 const { tokenExtractor, tokenValidator, userExtractor } = require('./middleware')
 
@@ -16,6 +16,8 @@ app.use('/api/blogs',tokenValidator,userExtractor)
 
 app.get('/api/blogs', getUserBlogs)
 app.post('/api/blogs', createNewBlogHandler)
+
+app.put('/api/blogs/:blogId', updateBlog)
 
 app.post('/api/users',createNewUserHandler)
 app.post('/api/users/login',loginUserHandler)

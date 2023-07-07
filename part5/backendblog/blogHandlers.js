@@ -1,5 +1,5 @@
 const { verifyToken } = require("./authHandlers")
-const { getBlogs, addBlog, deleteBlog } = require("./mongo")
+const { getBlogs, addBlog, deleteBlog, findAndUpdateBlog } = require("./mongo")
 
 
 async function getUserBlogs(request, response){
@@ -24,6 +24,24 @@ async function getUserBlogs(request, response){
    }
   }
 
+   async function updateBlog(request,response){
+   const jwtToken = request.token
+   try{
+
+      const payload = verifyToken(jwtToken)
+      console.log({payload})
+      const username = payload.username
+      let updatedBlog = request.body.blog
+      const blogId = request.params.blogId
+      updatedBlog = await findAndUpdateBlog(updatedBlog,blogId)
+      console.log({updatedBlog})
+      response.status(200).json(updatedBlog)
+   }catch(e){
+      console.log({errormessage:e.message})
+      response.status(500).json(e.message)
+   }
+  }
+
   async function deleteBlogHandler(request,response){
       const user = request.username
       const id = request.body.blogId
@@ -36,4 +54,4 @@ async function getUserBlogs(request, response){
   }
 
 
-  module.exports = {getUserBlogs,createNewBlogHandler}
+  module.exports = {getUserBlogs,createNewBlogHandler,updateBlog}

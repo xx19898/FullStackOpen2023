@@ -5,11 +5,10 @@ import UserInfo from './UserInfo';
 import BlogCreationForm from './BlogCreationForm';
 import Notification from './Notification';
 
-const BACKEND_URL = 'http://localhost:80'
+export const BACKEND_URL = 'http://localhost:80'
 
 function App(){
   const [loginState,setLoginState] = useState('inProcess')
-  const  [loggedInInfo,setLoggedInInfo] = useState({username:null,token:null})
   const [blogs,setBlogs] = useState([])
   
   const [username,setUsername] = useState('')
@@ -18,11 +17,11 @@ function App(){
   const [notificationActive,setNotificationActive] = useState(false)
   const [notificationText,setNotificationText] = useState('')
 
-  //console.log({token:loggedInInfo.token})
-  console.log({username:loggedInInfo.username})
+  const loggedInInfo = loginState === 'success' ?  JSON.parse(localStorage.getItem('loggedInInfo')) : null
+  if(loginState === 'success') console.log({username:loggedInInfo.username,token:loggedInInfo.token})
 
   return (
-    <div>
+    <div className="main">
       {
         notificationActive ? <Notification text={notificationText}/> : null
       }
@@ -61,7 +60,7 @@ function App(){
       setBlogs(blogs)
       setLoginState('success')
       console.log({response:response.data})
-      setLoggedInInfo({token:response.data.token,username:response.data.username})
+      localStorage.setItem('loggedInInfo',JSON.stringify({token:response.data.token,username:response.data.username}))
       showNotification('Login successful','success')
     }else{
       setLoginState('failed')
@@ -125,7 +124,7 @@ function App(){
     setLoginState('inProcess')
     setUsername('')
     setPassword('')
-    setLoggedInInfo({username:null,token:null})
+    localStorage.setItem('loggedInInfo',{username:null,token:null})
   }
 }
 
