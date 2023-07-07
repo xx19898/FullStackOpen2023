@@ -2,7 +2,7 @@ import { useState } from "react"
 import React from "react"
 import './App.css'
 
-const Blog = ({blog,like}) => {
+const Blog = ({blog,like,deleteBlog}) => {
     const [showFullInfo,setShowFullInfo] = useState(false)
 
     return(
@@ -14,15 +14,14 @@ const Blog = ({blog,like}) => {
                 showFullInfo ? 
                 <>
                     <p>Likes: {blog.likes === undefined ? 0 : blog.likes}</p>
-                    <button onClick={() => like()}>Like</button>
+                    <button onClick={() => like(blog._id,{blog,likes: blog.likes === undefined ? 1 : blog.likes + 1})}>Like</button>
                     <p>Url: {blog.url}</p>
+                    <button onClick={(e) => deleteBlog(blog._id)}>Delete</button>
                 </>
                 :
                 null 
             }
-        </li>
-        
-    )
+        </li>)
 }
 
 export default Blog

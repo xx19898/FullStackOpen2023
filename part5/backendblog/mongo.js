@@ -62,7 +62,7 @@ async function disconnectDB(){
     let blog = await Blog.findOne({_id:blogId}).populate('user',{username:1})
     if( blog.user.username != username) throw new Error('You do not own this blog, cant delete')
     else{
-      return await Blog.deleteOne({_id:blogId})
+      return await Blog.findByIdAndRemove(blogId)
     }
   }
 
@@ -107,6 +107,7 @@ async function disconnectDB(){
 
   module.exports = {
     deleteBlogs,deleteUsers,getBlogs,createBlog,
+    getBlogById,
     disconnectDB,connectDB,createNewUser,getUsers,
     getUserByName,deleteUserByName,addBlog,deleteBlog,
     findAndUpdateBlog

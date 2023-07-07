@@ -1,30 +1,37 @@
-import React from "react"
+import React, { useMemo } from "react"
 import './App.css'
 import Blog from "./Blog"
 import axios from "axios"
 import { BACKEND_URL } from "./App"
 
 const UserInfo = ({blogs,userInfo:{token,username},refetchBlogs,showNotification}) => {
-    console.log({blogs})
+    console.log({likes:blogs[0].likes})
+
+    const sortedBlogs = useMemo(() => blogs.sort(function(a,b){return a.likes - b.likes}),[blogs])
 
     return(
         <div>
             <p>Logged in user: <strong> {username} </strong></p>
-            <ul className="blog-list">
             {
-                blogs.map((blog) => {
-                    return <Blog blog={blog} like={like} key={blog._id}/>
+                blogs.length === 0 ? <p>You do not have any blogs stored yet ;(</p>
+                :
+                <ul className="blog-list">
+                {
+                sortedBlogs.map((blog) => {
+                    return <Blog blog={blog} like={like} deleteBlog={deleteBlog} key={blog._id}/>
                 })
+                }
+                </ul>
+
             }
-            </ul>
         </div>
     )
 
     async function like(blogId,blog){
         const response = await axios({
-            url:`${BACKEND_URL}/api/blogs/like`,
+            url:`${BACKEND_URL}/api/blogs/${blogId}`,
             method:'put',
-            data:{blogId},
+            data:{blog},
             withCredentials:false,
             headers:{Authorization: `Bearer ${token}`}})
         if(response.status === 200){
@@ -32,8 +39,24 @@ const UserInfo = ({blogs,userInfo:{token,username},refetchBlogs,showNotification
         }else{
             showNotification('Could not like')
         }            
-
     }
+
+    async function deleteBlog(blogId){
+        const response = await axios({
+            url:`${BACKEND_URL}/api/blogs/${blogId}`,
+            method:'delete',
+            withCredentials:false,
+            headers:{Authorization: `Bearer ${token}`}
+        })
+        if(response.status === 200){
+            await refetchBlogs()
+            showNotification(`Deleted blog with id ${blogId}`)
+        }else{
+            showNotification('Could not delete')
+        }            
+    }
+
+
 
 }
 

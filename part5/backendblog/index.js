@@ -1,12 +1,11 @@
-const http = require('http')
+
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const mongoose = require('mongoose')
-const { getBlogs, createBlog, createNewUser, connectDB } = require('./mongo')
-const { getUserBlogs, createNewBlogHandler, updateBlog } = require('./blogHandlers')
+const {connectDB} = require('./mongo')
+const { getUserBlogs, createNewBlogHandler, updateBlog, deleteBlogHandler } = require('./blogHandlers')
 const { createNewUserHandler, loginUserHandler } = require('./authHandlers')
-const { tokenExtractor, tokenValidator, userExtractor } = require('./middleware')
+const { tokenValidator, userExtractor } = require('./middleware')
 
 app.use(cors({
   origin: '*'
@@ -18,6 +17,7 @@ app.get('/api/blogs', getUserBlogs)
 app.post('/api/blogs', createNewBlogHandler)
 
 app.put('/api/blogs/:blogId', updateBlog)
+app.delete('/api/blogs/:blogId',deleteBlogHandler)
 
 app.post('/api/users',createNewUserHandler)
 app.post('/api/users/login',loginUserHandler)

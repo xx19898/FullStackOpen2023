@@ -42,7 +42,7 @@ function App(){
         loginState === 'success' 
         ? 
         <>
-        <UserInfo blogs={blogs} userInfo={loggedInInfo}/>
+        <UserInfo blogs={blogs} userInfo={loggedInInfo} showNotification={showNotification} refetchBlogs={refetchBlogs}/>
         <BlogCreationForm refetchBlogs={refetchBlogs} showNotification={showNotification} createBlog={createBlog} token={loggedInInfo.token} username={loggedInInfo.username}/>
         </>
         : <p>Login unsuccessful,please check your credentials</p>
