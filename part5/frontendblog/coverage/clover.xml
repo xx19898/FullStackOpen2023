@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1688835180403" clover="3.2.0">
+  <project timestamp="1688835180403" name="All files">
+    <metrics statements="45" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="14" coveredmethods="0" elements="71" coveredelements="0" complexity="0" loc="45" ncloc="45" packages="1" files="3" classes="3"/>
+    <file name="App.jsx" path="C:\Dev\HelsinkiFullStackOpen2023\part5\frontendblog\src\App.jsx">
+      <metrics statements="41" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="13" coveredmethods="0"/>
+      <line num="8" count="0" type="stmt"/>
+      <line num="11" count="0" type="stmt"/>
+      <line num="12" count="0" type="stmt"/>
+      <line num="14" count="0" type="stmt"/>
+      <line num="15" count="0" type="stmt"/>
+      <line num="17" count="0" type="stmt"/>
+      <line num="18" count="0" type="stmt"/>
+      <line num="20" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="21" count="0" type="stmt"/>
+      <line num="22" count="0" type="stmt"/>
+      <line num="26" count="0" type="stmt"/>
+      <line num="30" count="0" type="stmt"/>
+      <line num="31" count="0" type="stmt"/>
+      <line num="36" count="0" type="stmt"/>
+      <line num="38" count="0" type="stmt"/>
+      <line num="67" count="0" type="stmt"/>
+      <line num="68" count="0" type="stmt"/>
+      <line num="69" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="70" count="0" type="stmt"/>
+      <line num="71" count="0" type="stmt"/>
+      <line num="72" count="0" type="stmt"/>
+      <line num="73" count="0" type="stmt"/>
+      <line num="77" count="0" type="stmt"/>
+      <line num="79" count="0" type="stmt"/>
+      <line num="80" count="0" type="stmt"/>
+      <line num="83" count="0" type="stmt"/>
+      <line num="88" count="0" type="stmt"/>
+      <line num="94" count="0" type="stmt"/>
+      <line num="98" count="0" type="stmt"/>
+      <line num="99" count="0" type="stmt"/>
+      <line num="103" count="0" type="stmt"/>
+      <line num="112" count="0" type="stmt"/>
+      <line num="116" count="0" type="stmt"/>
+      <line num="126" count="0" type="stmt"/>
+      <line num="130" count="0" type="stmt"/>
+      <line num="131" count="0" type="stmt"/>
+      <line num="132" count="0" type="stmt"/>
+      <line num="136" count="0" type="stmt"/>
+      <line num="137" count="0" type="stmt"/>
+      <line num="138" count="0" type="stmt"/>
+      <line num="139" count="0" type="stmt"/>
+    </file>
+    <file name="Notification.jsx" path="C:\Dev\HelsinkiFullStackOpen2023\part5\frontendblog\src\Notification.jsx">
+      <metrics statements="3" coveredstatements="0" conditionals="2" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <line num="4" count="0" type="stmt"/>
+      <line num="5" count="0" type="cond" truecount="0" falsecount="2"/>
+      <line num="6" count="0" type="stmt"/>
+    </file>
+    <file name="main.jsx" path="C:\Dev\HelsinkiFullStackOpen2023\part5\frontendblog\src\main.jsx">
+      <metrics statements="1" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <line num="6" count="0" type="stmt"/>
+    </file>
+  </project>
+</coverage>

@@ -14,7 +14,10 @@ async function getUserBlogs(request, response){
       const payload = verifyToken(jwtToken)
       console.log({payload})
       const username = payload.username
-      const blog = request.body.blog
+      let blog = request.body.blog
+      if(blog.likes === undefined){
+         blog = {...blog,likes:0}
+      }
       const savedBlog = await addBlog(username,blog)
       console.log('GOT TO FINISH')
       response.status(201).json(savedBlog)
