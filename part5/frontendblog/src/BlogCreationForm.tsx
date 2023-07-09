@@ -33,12 +33,12 @@ const BlogCreationForm = ({ createBlog, refetchBlogs, token, username, showNotif
           }}
           className='blog-creation-form'
         >
-          <label className='label'>Title</label>
-          <input onChange={(e) => setTitle(e.target.value)} className='input'></input>
-          <label className='label'>Author</label>
-          <input onChange={(e) => setAuthor(e.target.value)} className='input'></input>
-          <label className='label'>Url</label>
-          <input onChange={(e) => setUrl(e.target.value)} className='input'></input>
+          <label htmlFor="title" className='label'>Title</label>
+          <input id="titleInput" onChange={(e) => setTitle(e.target.value)} className='input'></input>
+          <label htmlFor="author" className='label'>Author</label>
+          <input id="authorInput" onChange={(e) => setAuthor(e.target.value)} className='input'></input>
+          <label htmlFor="url" className='label'>Url</label>
+          <input id="urlInput" onChange={(e) => setUrl(e.target.value)} className='input'></input>
           <button>Create Blog</button>
         </form>
       ) : null}

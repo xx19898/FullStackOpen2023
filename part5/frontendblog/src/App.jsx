@@ -33,9 +33,9 @@ function App() {
           className='form'
         >
           <label>Username</label>
-          <input onChange={(e) => setUsername(e.target.value)}></input>
+          <input id="usernameInputLogin" onChange={(e) => setUsername(e.target.value)}></input>
           <label>Password</label>
-          <input type='password' onChange={(e) => setPassword(e.target.value)}></input>
+          <input id="passwordInputLogin" type='password' onChange={(e) => setPassword(e.target.value)}></input>
           <button type='submit' className='login-button'>
             Login
           </button>

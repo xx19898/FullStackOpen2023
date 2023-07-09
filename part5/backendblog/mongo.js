@@ -1,5 +1,7 @@
+const bcrypt = require('bcryptjs/dist/bcrypt')
 const mongoose = require('mongoose')
 const process = require('process')
+
 
 async function connectDB(){
   mongoose.set('strictQuery',false)
@@ -80,7 +82,8 @@ async function disconnectDB(){
   }
 
   function createNewUser(newUser){
-    const user = new User(newUser)
+    const encryptedPassword = encryptPassword(newUser.password)
+    const user = new User({...newUser,password:encryptedPassword})
     return user.save()
   }
 
@@ -105,10 +108,30 @@ async function disconnectDB(){
     return User.find({}).populate('blogs')
   }
 
+  async function resetDB(){
+    await Blog.deleteMany({})
+    await User.deleteMany({})
+  }
+
+  async function createTestUser(){
+    const encryptedPassword = encryptPassword('testPassword')
+    const encryptedPassword2 = encryptPassword('testPassword2')
+    const testUser = new User({username:'testUser',password:encryptedPassword})
+    const secondTestUser = new User({username:'testUser2',password:encryptedPassword2})
+    secondTestUser.save()
+    return testUser.save()
+  }
+
+  function encryptPassword(password){
+    var salt = bcrypt.genSaltSync(10)
+    var hash = bcrypt.hashSync(password,salt)
+    return hash
+  }
+
   module.exports = {
     deleteBlogs,deleteUsers,getBlogs,createBlog,
     getBlogById,
     disconnectDB,connectDB,createNewUser,getUsers,
     getUserByName,deleteUserByName,addBlog,deleteBlog,
-    findAndUpdateBlog
+    findAndUpdateBlog,resetDB,createTestUser
   }

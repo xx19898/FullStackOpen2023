@@ -2,7 +2,7 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
-const {connectDB} = require('./mongo')
+const {connectDB, resetDB, createTestUser} = require('./mongo')
 const { getUserBlogs, createNewBlogHandler, updateBlog, deleteBlogHandler } = require('./blogHandlers')
 const { createNewUserHandler, loginUserHandler } = require('./authHandlers')
 const { tokenValidator, userExtractor } = require('./middleware')
@@ -21,6 +21,14 @@ app.delete('/api/blogs/:blogId',deleteBlogHandler)
 
 app.post('/api/users',createNewUserHandler)
 app.post('/api/users/login',loginUserHandler)
+
+//TESTING ENDPOINTS
+app.post('/api/tests/reset',async (req,res) => {
+  await resetDB()
+  await createTestUser()
+  return res.status(200).send({})
+})
+
 const PORT = 80
 
 console.log(`ENVIRONMENT IS ${process.env.NODE_ENV}`)

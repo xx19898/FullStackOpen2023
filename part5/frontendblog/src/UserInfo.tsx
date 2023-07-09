@@ -10,7 +10,7 @@ const UserInfo = ({ blogs, userInfo: { token, username }, refetchBlogs, showNoti
   const sortedBlogs = useMemo(
     () =>
       blogs.sort(function (a, b){
-        return a.likes - b.likes;
+        return b.likes - a.likes;
       }),
     [blogs],
   );

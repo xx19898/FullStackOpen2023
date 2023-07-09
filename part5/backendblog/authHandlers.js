@@ -1,6 +1,7 @@
 var bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const { createNewUser, getUserByName } = require('./mongo');
+module.exports = {}
 
 async function createNewUserHandler(request,response){
     const err = await validateUserDataForRegistering(request.body)
@@ -8,9 +9,8 @@ async function createNewUserHandler(request,response){
     if(err.error != undefined) response.status(400).json(err.error)
     else{
         const user = request.body
-        const encryptedPassword = encryptPassword(user.password)
         try{
-        const savedUser = await createNewUser({...user,password:encryptedPassword})
+        const savedUser = await createNewUser({...user})
         response.status(201).json(savedUser)
         }catch(error){
         response.status(500).json(error.message)
@@ -71,4 +71,4 @@ function passwordMatch(plainPassword,hash){
     return bcrypt.compareSync(plainPassword,hash)
 }
 
-module.exports = {createNewUserHandler,loginUserHandler,verifyToken}
+module.exports = {createNewUserHandler,loginUserHandler,verifyToken,encryptPassword}

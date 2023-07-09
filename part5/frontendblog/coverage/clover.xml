@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1688835180403" clover="3.2.0">
-  <project timestamp="1688835180403" name="All files">
+<coverage generated="1688874346695" clover="3.2.0">
+  <project timestamp="1688874346695" name="All files">
     <metrics statements="45" coveredstatements="0" conditionals="12" coveredconditionals="0" methods="14" coveredmethods="0" elements="71" coveredelements="0" complexity="0" loc="45" ncloc="45" packages="1" files="3" classes="3"/>
     <file name="App.jsx" path="C:\Dev\HelsinkiFullStackOpen2023\part5\frontendblog\src\App.jsx">
       <metrics statements="41" coveredstatements="0" conditionals="10" coveredconditionals="0" methods="13" coveredmethods="0"/>
