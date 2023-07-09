@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const process = require('process')
+exports = {}
 
 async function connectDB(){
   mongoose.set('strictQuery',false)
@@ -98,8 +99,17 @@ async function disconnectDB(){
     return User.find({}).populate('blogs')
   }
 
-  module.exports = {
-    deleteBlogs,deleteUsers,getBlogs,createBlog,
-    disconnectDB,connectDB,createNewUser,getUsers,
-    getUserByName,deleteUserByName,addBlog,deleteBlog
+  moduleexports = {
+    deleteBlogs,
+    deleteUsers,
+    getBlogs,
+    createBlog,
+    disconnectDB,
+    connectDB,
+    createNewUser,
+    getUsers,
+    getUserByName,
+    deleteUserByName,
+    addBlog,
+    deleteBlog
   }

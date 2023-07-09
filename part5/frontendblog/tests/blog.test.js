@@ -4,7 +4,6 @@ import BlogCreationForm from "../src/BlogCreationForm"
 
 test('blog component',() => {
     render(<Blog addedBy="testUser" blog={{likes:10,url:'www.test.com',title:'Test Title',author:'test author',user:{username:'test user'}}} like={() => {return {}}} deleteBlog={() => {return {}}}/>)
-
     const title = screen.getByText('Title: Test Title')
     const author = screen.getByText('Author: test author')
     const url = screen.queryByText('Url: www.test.com')

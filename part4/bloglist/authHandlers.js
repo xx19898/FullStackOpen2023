@@ -68,4 +68,4 @@ function passwordMatch(plainPassword,hash){
     return bcrypt.compareSync(plainPassword,hash)
 }
 
-module.exports = {createNewUserHandler,loginUserHandler,verifyToken}
+module.exports = {createNewUserHandler,encryptPassword,loginUserHandler,verifyToken}
