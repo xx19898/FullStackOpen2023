@@ -1,6 +1,5 @@
 import {fireEvent, render, screen } from "@testing-library/react"
 import Blog from "../src/Blog"
-import React from "react"
 import BlogCreationForm from "../src/BlogCreationForm"
 
 test('blog component',() => {
