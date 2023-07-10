@@ -1,11 +1,11 @@
-import { useDispatch } from "react-redux"
-import { createChangeFilterAction } from "./reducers/filterReducer"
+import {useDispatch} from "react-redux"
+import {changeFilter} from "./slices/filterSlice"
 
 const AnecdoteFilter = () => {
     const dispatch = useDispatch()
 
     const handleChange = (e) => {
-        dispatch(createChangeFilterAction(e.target.value))
+        dispatch(changeFilter(e.target.value))
     }
 
     return(

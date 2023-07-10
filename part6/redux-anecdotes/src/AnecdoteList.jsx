@@ -1,21 +1,22 @@
 import { useDispatch, useSelector } from "react-redux"
-import { createVoteAction } from "./reducers/anecdoteReducer"
+import { voteAnecdote, voteAnecdoteThunk } from "./slices/anecdoteSlice"
+import { setNotificationMessage, toggleAndSetNotification } from "./slices/notificationSlice"
+import { useState } from "react"
 
 
 const AnecdoteList = () => {
     const dispatch = useDispatch()
     const anecdotes = useSelector(state => state.anecdotes)
+    
 
     console.log({anecdotes})
-
     
     const vote = (anecdote) => {
-        dispatch(createVoteAction(anecdote))
+        dispatch(voteAnecdoteThunk(anecdote))
     }
 
 
     const filterString = useSelector(state => state.filter.filter)
-    console.log({filterString})
     
     function filterAnecdotes(anecdote){
       if(filterString.trim().length === 0) return true
