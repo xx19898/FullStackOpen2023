@@ -7,10 +7,17 @@ import { anecdoteReducer, anecdoteSlice } from './slices/anecdoteSlice'
 import { filterReducer, filterSlice } from './slices/filterSlice'
 import { notificationReducer } from './slices/notificationSlice'
 
-const store = configureStore({reducer:{filter:filterReducer,anecdotes:anecdoteReducer,notification:notificationReducer}})
+import {
+  QueryClient,
+  QueryClientProvider,
+} from 'react-query'
 
+const store = configureStore({reducer:{filter:filterReducer,anecdotes:anecdoteReducer,notification:notificationReducer}})
+export const queryClient = new QueryClient()
 ReactDOM.createRoot(document.getElementById('root')).render(
   <Provider store={store}>
-    <App />
+        <QueryClientProvider client={queryClient}>
+            <App />
+        </QueryClientProvider>
   </Provider>
 )

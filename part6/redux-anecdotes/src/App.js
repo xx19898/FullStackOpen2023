@@ -4,22 +4,35 @@ import AnecdoteFilter from './AnecdoteFilter'
 import AnecdoteForm from './AnecdoteForm'
 import AnecdoteList from './AnecdoteList'
 import Notification from './components/Notification'
-import { useEffect } from 'react'
-import axios from "axios"
-import { fetchAnecdotesThunk, setAnecdotes } from './slices/anecdoteSlice'
+import axios from 'axios'
+import { createContext, useReducer } from 'react'
+
+const notificationReducer = (state, action) => {
+  switch (action.type) {
+    case "ERROR":
+        return {message: action.payload.message,color:'pink',status:'ERROR'}
+    case "SUCCESS":
+        return {message:action.payload.message,color:'green',status:'SUCCESS'}
+    case "NONE":
+        return {message:'',color:'',status:'NONE'}
+    case "UPDATE_TIMEOUT_OBJ":
+        return {...state,timeoutId:action.payload.timeoutId}
+    default:
+        return state
+  }
+}
+
+export const NotificationContext = createContext()
 
 const App = () => {
-  const dispatch = useDispatch()
-  useEffect(() => {
-      dispatch(fetchAnecdotesThunk())
-  },[])
   
-  const {notificationStatus,notificationMessage} = useSelector(state => state.notification)
+  const [notification,notificationDispatch] = useReducer(notificationReducer, {message:'',color:'',status:'NONE',timeoutId:null})
   
   return (
+    <NotificationContext.Provider value={[notification,notificationDispatch]}>
     <div>
       {
-        notificationStatus ? <Notification notificationMessage={notificationMessage}/> : null
+        notification.status !== 'NONE' ? <Notification/> : null
       }
       <h2>Anecdote Filter</h2>
       <AnecdoteFilter />
@@ -27,6 +40,7 @@ const App = () => {
       <AnecdoteList />
       <AnecdoteForm />
     </div>
+    </NotificationContext.Provider>
   )
 
   
@@ -34,7 +48,13 @@ const App = () => {
 
 export default App
 
-export async function fetchAnecdotes(){
+export async function fetchAnecdotesApiCall(){
   const response = await axios.get('http://localhost:3001/anecdotes')
   return response.data
+}
+
+export async function voteAnecdoteApiCall(anecdote){
+  const updatedVotes = anecdote.votes + 1
+  const updatedAnecdote = {...anecdote,votes:updatedVotes}
+  const response = await axios.put(`http://localhost:3001/anecdotes/${anecdote.id}`,updatedAnecdote)
 }

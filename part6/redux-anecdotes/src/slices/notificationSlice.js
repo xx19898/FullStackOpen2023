@@ -25,7 +25,6 @@ export const notificationSlice = createSlice({
 
 export const setNotificationThunk = (text,time) => {
     return async (dispatch,getState) => {
-        console.log('NOTIFICATION THUNK')
         if(getState().notification.timeoutId != null) clearTimeout(getState().notification.timeoutId)
         dispatch(toggleAndSetNotification({notificationMessage:text,notificationStatus:true}))
         let timeoutId = setTimeout(() => dispatch(toggleAndSetNotification({notificationMessage:'',notificationStatus:false}))

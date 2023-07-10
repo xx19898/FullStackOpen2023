@@ -31,33 +31,7 @@ export const anecdoteSlice = createSlice({
   }
 })
 
-export const fetchAnecdotesThunk = () => {
-  return async dispatch => {
-    const anecdotes = await fetchAnecdotes()
-    dispatch(setAnecdotes(anecdotes))
-  }
-}
 
-export const createNewAnecdoteThunk = (anecdoteText) => {
-  return async dispatch => {
-    await createNewAnecdote(anecdoteText)
-    dispatch(fetchAnecdotesThunk())
-  }
-}
-
-export const voteAnecdoteThunk = (anecdote) => {
-  return async dispatch => {
-    await voteAnecdoteApiCall(anecdote)
-    dispatch(fetchAnecdotesThunk())
-    dispatch(setNotificationThunk(`You voted for ${anecdote.content}`,5000))
-  }
-}
-
-async function voteAnecdoteApiCall(anecdote){
-    const updatedVotes = anecdote.votes + 1
-    const updatedAnecdote = {...anecdote,votes:updatedVotes}
-    const response = await axios.put(`http://localhost:3001/anecdotes/${anecdote.id}`,updatedAnecdote)
-}
 
 export const {voteAnecdote,setAnecdotes} = anecdoteSlice.actions
 
