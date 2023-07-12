@@ -28,6 +28,7 @@ export async function createBlog({blog,token}) {
 }
 
 export async function getBlogDetailed({blogId,token}){
+  console.log('REFETCHING BLOG!')
   const response = await axios({
     method: 'get',
     url: `${BACKEND_URL}/api/blogs/${blogId}`,
@@ -53,12 +54,11 @@ export async function getBlogs({token}) {
   return response.data;
 }
 
-export async function like({ blogId, blog, token }) {
-  
+export async function like({ blog, token }) {
   const response = await axios({
-    url: `${BACKEND_URL}/api/blogs/${blogId}`,
+    url: `${BACKEND_URL}/api/blogs/${blog._id}`,
     method: 'put',
-    data: { blog },
+    data: { blog:{...blog,likes:blog.likes + 1} },
     withCredentials: false,
     headers: { Authorization: `Bearer ${token}` },
   });
@@ -77,7 +77,7 @@ export async function deleteBlog({ blogId, token }) {
 
 export async function getUsersInfo({token}){
   const response = await axios({
-    url: `${BACKEND_URL}/api/blogs/userInfo`,
+    url: `${BACKEND_URL}/api/users/userInfo`,
     method: 'get',
     withCredentials: false,
     headers: { Authorization: `Bearer ${token}` },
@@ -93,4 +93,15 @@ export async function getUserDetailedInfo({token,userId}){
     headers: { Authorization: `Bearer ${token}` },
   });
   return response.data
+}
+
+export async function addNewComment({token,blogId,comment}){
+  const response = await axios({
+    url : `${BACKEND_URL}/api/blogs/comment/${blogId}`,
+    method: 'post',
+    data:{comment:comment},
+    withCredentials:false,
+    headers: { Authorization: `Bearer ${token}` },
+  })
+  return response.data;
 }

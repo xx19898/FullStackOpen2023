@@ -2,13 +2,15 @@ import { useContext } from 'react';
 import { AppContext } from '../../App';
 import Blog from './Blog';
 import { queryClient } from '../../main';
-import { useMutation } from 'react-query';
-import { deleteBlog, like } from '../../apiCalls';
+import { useMutation, useQuery } from 'react-query';
+import { deleteBlog, getBlogs, like } from '../../apiCalls';
 import { useMemo } from 'react';
 import BlogCreationForm from './BlogCreationForm';
 
 export const BlogSection = () => {
   const { state, dispatch } = useContext(AppContext);
+  const token = state.userInfo.token;
+  const { data } = useQuery('blogs', () => getBlogs({ token: token }));
 
   const likeMutation = useMutation(like, {
     onSuccess: (data, variables) => {
@@ -33,14 +35,18 @@ export const BlogSection = () => {
     },
   });
 
+  console.log({ data });
+
   const blogs = useMemo(() => {
-    if (state.blogs === undefined || state.blogs.length === 0) return [];
+    if (data === undefined || data.length === 0) return [];
     else {
-      return state.blogs.sort(function (a, b) {
+      return data.sort(function (a, b) {
         return a.likes - b.likes;
       });
     }
-  }, [state.blogs]);
+  }, [data]);
+
+  console.log({ blogs });
 
   return (
     <>
@@ -48,15 +54,15 @@ export const BlogSection = () => {
         <p>No blogs here yet :/</p>
       ) : (
         <ul>
-          {blogs.map((blog) => {
+          {blogs.map((blog) => (
             <Blog
               blog={blog}
               addedBy={''}
               like={likeMutation.mutate}
               deleteBlog={deleteMutation.mutate}
               key={blog._id}
-            />;
-          })}
+            />
+          ))}
         </ul>
       )}
       <BlogCreationForm />

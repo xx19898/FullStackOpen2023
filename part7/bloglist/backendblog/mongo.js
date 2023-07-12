@@ -23,8 +23,26 @@ async function disconnectDB(){
       user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
-      }
+      },
+      comments: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'Comment'
+        }
+      ]
     })
+  
+  const commentSchema = mongoose.Schema({
+    text: String,
+    blog:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Blog',
+    },
+    user:{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
+  })
 
   const userSchema = mongoose.Schema({
     username: String,
@@ -35,11 +53,18 @@ async function disconnectDB(){
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Blog'
       }
+    ],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment'
+      }
     ]
   }) 
   
   const Blog = mongoose.model('Blog', blogSchema)
   const User = mongoose.model('User',userSchema)
+  const Comment = mongoose.model('Comment',commentSchema)
 
   function getBlogs(){
     return Blog.find({}).populate('user',{username:1,name:1,_id:1})
@@ -54,7 +79,7 @@ async function disconnectDB(){
   }
 
   function getBlogById(id){
-    return Blog.findOne({'_id':id}).populate('user',{username:1,name:1,_id:1})
+    return Blog.findOne({'_id':id}).populate({path:'user',select:{username:1,name:1,_id:1}}).populate({path: 'comments',select:{text:1,user:1},populate:{path:'user',select:{username:1,user_id:1}}})
   }
   
   function createBlog(newBlog){
@@ -103,8 +128,26 @@ async function disconnectDB(){
     const savedUser = await user.save()
     return newBlog
   }
+
+  async function addComment({username,blogId,comment}){
+    const user = await getUserByName(username)
+    let newComment = new Comment({text:comment,blog:blogId,user:user._id})
+    newComment = await newComment.save()
+    if(user.comments === undefined) user.comments = [newComment._id]
+    else{
+      user.comments = user.comments.concat(newComment._id)
+    }
+    await user.save()
+    const blog = await getBlogById(blogId)
+    if(blog.comments === undefined) blog.comments = [newComment._id]
+    else{
+      blog.comments = blog.comments.concat(newComment._id) 
+    }
+    const updatedBlog = blog.save()
+    return updatedBlog
+  }
+
   async function findAndUpdateBlog(newBlog,id){
-    console.log({newBlog})
     const newDoc = await Blog.findOneAndUpdate({_id:id},newBlog,{
       new:true
     })
@@ -140,5 +183,5 @@ async function disconnectDB(){
     getBlogById,
     disconnectDB,connectDB,createNewUser,getUsers,
     getUserByName,deleteUserByName,addBlog,deleteBlog,
-    findAndUpdateBlog,resetDB,createTestUser,getUsersWithBlogs,getUserInfoById
+    findAndUpdateBlog,resetDB,createTestUser,getUsersWithBlogs,getUserInfoById,addComment
   }

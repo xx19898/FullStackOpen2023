@@ -1,5 +1,5 @@
 const { verifyToken } = require("./authHandlers")
-const { getBlogs, addBlog, deleteBlog, findAndUpdateBlog, getBlogById, getUsersWithBlogs, getUserInfoById } = require("./mongo")
+const { getBlogs, addBlog, deleteBlog, findAndUpdateBlog, getBlogById, getUsersWithBlogs, getUserInfoById, addComment } = require("./mongo")
 
 
 async function getUserBlogs(request, response){
@@ -20,8 +20,6 @@ async function getBlogHandler(request,response){
 }
 
 async function getUsersBasicInfo(request,response){
-
-   
    const usersWithBlogs = await getUsersWithBlogs()
    const usersWithNumberOfBlogs = usersWithBlogs.map((userWithBlogs) => {
       const count = userWithBlogs.blogs.length
@@ -57,6 +55,7 @@ async function getUsersBasicInfo(request,response){
       const payload = verifyToken(jwtToken)
       const username = payload.username
       let updatedBlog = request.body.blog
+      console.log({updatedBlog})
       const blogId = request.params.blogId
       updatedBlog = await findAndUpdateBlog(updatedBlog,blogId)
       response.status(200).json(updatedBlog)
@@ -67,10 +66,11 @@ async function getUsersBasicInfo(request,response){
 
   async function deleteBlogHandler(request,response){
       const user = request.username
+      console.log({user})
       const id = request.params.blogId
       const blog = await getBlogById(id)
 
-      if(blog[0].user.username != user) response.status(400).json({message:'Could not delete, not authorized'})
+      if(blog.user.username != user) response.status(400).json({message:'Could not delete, not authorized'})
       else{
          try{
             const deletedBlog = await deleteBlog(user,id)
@@ -81,5 +81,15 @@ async function getUsersBasicInfo(request,response){
       }
   }
 
+  async function addCommentHandler(req,res){
+   const username = req.username
+   const blogId = req.params.blogId
+   const comment = req.body.comment
 
-  module.exports = {getBlogHandler,getUserBlogs,createNewBlogHandler,updateBlog,deleteBlogHandler,getUsersBasicInfo,getUserInfoHandler}
+   const updatedBlog = await addComment({username:username,blogId:blogId,comment:comment})
+
+   res.json(updatedBlog)
+  }
+
+
+  module.exports = {addCommentHandler,getBlogHandler,getUserBlogs,createNewBlogHandler,updateBlog,deleteBlogHandler,getUsersBasicInfo,getUserInfoHandler}

@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const {connectDB, resetDB, createTestUser, getUserInfoById} = require('./mongo')
-const { getUserBlogs, createNewBlogHandler, updateBlog, deleteBlogHandler, getUsersBasicInfo, getUserInfoHandler, getBlogHandler } = require('./blogHandlers')
+const { getUserBlogs, createNewBlogHandler, updateBlog, deleteBlogHandler, getUsersBasicInfo, getUserInfoHandler, getBlogHandler, addCommentHandler } = require('./blogHandlers')
 const { createNewUserHandler, loginUserHandler } = require('./authHandlers')
 const { tokenValidator, userExtractor } = require('./middleware')
 
@@ -15,16 +15,17 @@ app.use('/api/blogs',tokenValidator,userExtractor)
 
 app.get('/api/blogs', getUserBlogs)
 app.get('/api/blogs/:blogId',getBlogHandler)
-app.get('/api/blogs/userInfo',(request,response) => response.json('Error'))
+
 app.get('/api/blogs/user/:userId',getUserInfoHandler)
 
 app.put('/api/blogs/:blogId', updateBlog)
 app.delete('/api/blogs/:blogId',deleteBlogHandler)
+app.post('/api/blogs/comment/:blogId',addCommentHandler)
 
 app.post('/api/blogs', createNewBlogHandler)
 app.post('/api/users',createNewUserHandler)
 app.post('/api/users/login',loginUserHandler)
-
+app.get('/api/users/userInfo',getUsersBasicInfo)
 //TESTING ENDPOINTS
 app.post('/api/tests/reset',async (req,res) => {
   await resetDB()
