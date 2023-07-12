@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './App.css';
-import UserInfo from './UserInfo';
-import BlogCreationForm from './BlogCreationForm';
 import Notification from './Notification';
 import { useReducer } from 'react';
-import { useMutation } from 'react-query';
-import { signIn } from './apiCalls';
+import { LoginPage } from './views/LoginPage';
+import { AppBody } from './views/AppBody';
 
 export const BACKEND_URL = 'http://localhost:80';
 
@@ -33,22 +31,6 @@ const AppReducer = (state, action) => {
 function App() {
   const [state, dispatch] = useReducer(AppReducer, initialAppState);
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const login = useMutation(signIn, {
-    onSuccess: (data) => {
-      dispatch({
-        type: 'SET_USERINFO',
-        payload: { username: data.data.username, token: data.data.token },
-      });
-      dispatch({
-        type: 'SET_NOTIFICATION',
-        payload: { text: `${data.data.username} successfully logged in!`, type: 'SUCCESS' },
-      });
-    },
-  });
-
   const notificationStatus = state.notification.text;
   const loggedIn = state.userInfo.username != null;
 
@@ -56,50 +38,10 @@ function App() {
     <AppContext.Provider value={{ state: state, dispatch: dispatch }}>
       <div className='main'>
         {notificationStatus ? <Notification text={state.notification.text} /> : null}
-        {loggedIn ? (
-          <button onClick={() => logout()}>Log out</button>
-        ) : (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              login.mutate({ username: username, password: password });
-            }}
-            className='form'
-          >
-            <label>Username</label>
-            <input id='usernameInputLogin' onChange={(e) => setUsername(e.target.value)}></input>
-            <label>Password</label>
-            <input
-              id='passwordInputLogin'
-              type='password'
-              onChange={(e) => setPassword(e.target.value)}
-            ></input>
-            <button type='submit' className='login-button'>
-              Login
-            </button>
-          </form>
-        )}
-        {loggedIn ? (
-          <>
-            <UserInfo />
-            <BlogCreationForm />
-          </>
-        ) : (
-          <p>Login unsuccessful,please check your credentials</p>
-        )}
+        {loggedIn ? <AppBody /> : <LoginPage />}
       </div>
     </AppContext.Provider>
   );
-
-  async function logout() {
-    dispatch({
-      type: 'SET_USERINFO',
-      payload: {
-        username: null,
-        token: null,
-      },
-    });
-  }
 }
 
 export default App;

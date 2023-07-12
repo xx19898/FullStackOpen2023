@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import './App.css';
-import Blog from './Blog';
+import Blog from './views/blogs/Blog';
 import { AppContext } from './App';
 import { useQuery, useMutation } from 'react-query';
 import { queryClient } from './main';
@@ -46,8 +46,6 @@ const UserInfo = () => {
   }, [blogs]);
 
   if (sortedBlogs === undefined) return <p>Loading blogs...</p>;
-
-  console.log('User Info')
 
   return (
     <div>

@@ -1,9 +1,9 @@
 import { useContext, useState } from 'react';
-import './App.css';
+import '../../App.css';
 import { useMutation } from 'react-query';
-import { queryClient } from './main';
-import { AppContext } from './App';
-import { createBlog } from './apiCalls';
+import { queryClient } from '../../main';
+import { AppContext } from '../../App';
+import { createBlog } from '../../apiCalls';
 
 const BlogCreationForm = () => {
   const [title, setTitle] = useState('');
@@ -14,9 +14,16 @@ const BlogCreationForm = () => {
 
   const token = state.userInfo.token;
 
+  function reset() {
+    setTitle('');
+    setAuthor('');
+    setUrl('');
+  }
+
   const createNewBlog = useMutation(createBlog, {
     onSuccess: (data, variables) => {
       queryClient.invalidateQueries('blogs');
+      reset();
       dispatch({
         type: 'SET_NOTIFICATION',
         payload: { type: 'SUCCESS', text: `Added ${variables.title}` },

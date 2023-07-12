@@ -1,22 +1,23 @@
 import { useContext, useState } from 'react';
-import './App.css';
+import '../../App.css';
 import PropTypes from 'prop-types';
-import { AppContext } from './App';
+import { AppContext } from '../../App';
+import { Link } from 'react-router-dom';
 
 const Blog = ({ blog, like, deleteBlog, addedBy }) => {
   const [showFullInfo, setShowFullInfo] = useState(false);
 
-  const { state} = useContext(AppContext);
-  const token = state.userInfo.token
-  console.log({blog})
-  console.log({token})
-  console.log({blogId:blog._id})
+  const { state } = useContext(AppContext);
+  const token = state.userInfo.token;
+
   return (
     <li className='blog'>
       <button onClick={() => setShowFullInfo(!showFullInfo)}>
         {showFullInfo ? 'Hide' : 'View'}
       </button>
-      <p>Title: {blog.title}</p>
+      <p>
+        Title: <Link to={`/blogs/${blog._id}`}>{blog.title}</Link>
+      </p>
       <p>Author: {blog.author}</p>
       {showFullInfo ? (
         <>
