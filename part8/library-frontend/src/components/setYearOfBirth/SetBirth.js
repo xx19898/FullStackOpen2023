@@ -24,7 +24,12 @@ const SET_BORN = gql`
 const SetBirth = () => {
     const {data} = useQuery(ALL_AUTHORS)
     const [selected,setSelected] = useState('')
-    const [editAuthor] = useMutation(SET_BORN)
+    const [newBirthDate,setBirthDate] = useState(null)
+    const [editAuthor] = useMutation(SET_BORN,{
+        refetchQueries: [
+            ALL_AUTHORS
+        ]
+    })
     
     if(!data) return <p>Loading authors...</p>
 
@@ -38,8 +43,11 @@ const SetBirth = () => {
 
     function getBirthDate(authorName,authorsparam){
         console.log({authorsparam})
+        console.log({authorName})
         if(authorName === '') return undefined
-        return authors.find((author) => author.name === authorName).born
+        const authorWithSameName = authorsparam.find((author) => author.name === authorName)
+        console.log({date:authorWithSameName.born})
+        return authorWithSameName.born
     }
 
     const options = authors.map((author) => {
@@ -48,9 +56,10 @@ const SetBirth = () => {
     
     return(
         <div>
-            <p>Current birth year of the chosen author: <strong>{getBirthDate(selected,authors) === undefined ? 'undefined' : getBirthDate(selected,authors)}</strong></p>
-        <Select value={selected} onChange={(e) => setSelected(e)} options={options}/>
-        <button onClick={() => editAuthor({variables:{name:selected,setBornTo:getBirthDate(selected,authors)}})}>Set birth year</button>
+            <p>Current birth year of the chosen author: <strong>{!getBirthDate(selected,authors) ? 'undefined' : getBirthDate(selected,authors)}</strong></p>
+        <Select value={{label:selected}} label={selected} onChange={(e) => setSelected(e.label)} options={options}/>
+        <input onChange={(e) => setBirthDate(e.target.value)}></input>
+        <button onClick={() => editAuthor({variables:{name:selected,setBornTo:parseInt(newBirthDate)}})}>Set birth year</button>
         </div>
     )
 }

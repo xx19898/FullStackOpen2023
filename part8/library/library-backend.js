@@ -171,15 +171,20 @@ const resolvers = {
       return newBook;
     },
     editAuthor: (root,{name,setBornTo}) => {
-      const author = authors.find((author) => author.name === name)
-      if(author){
-        author.born = setBornTo
-        authors = [...authors,author]
-        return author
+      const authorToUpdate = authors.find((author) => author.name === name)
+      if(authorToUpdate){
+        const updatedAuthors = authors.map((author) => {
+          if(author.name !== authorToUpdate.name) return author
+          else return {...author,born:setBornTo}
+          })
+        authors = updatedAuthors
+        console.log({updatedAuthors})
+        const updatedAuthor = authors.find((author) => author.name === name)
+        return updatedAuthor
       }else{
         return {}
       }
-    }
+    },
   }
 }
 
