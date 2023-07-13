@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import './App.css';
-import Blog from './Blog';
 import axios from 'axios';
 import React from 'react';
 import { BACKEND_URL } from './App';
+import Blog from '../../../part7/bloglist/frontendblog/src/Blog';
 
 const UserInfo = ({ blogs, userInfo: { token, username }, refetchBlogs, showNotification }) => {
 
@@ -25,7 +25,7 @@ const UserInfo = ({ blogs, userInfo: { token, username }, refetchBlogs, showNoti
       ) : (
         <ul className='blog-list'>
           {sortedBlogs.map((blog) => {
-            return <Blog blog={blog} addedBy={username} like={like} deleteBlog={deleteBlog} key={blog._id} />;
+            return <Blog blog={blog} addedBy={username} like={like} deleteBlog={deleteBlog} key={blog._id} />
           })}
         </ul>
       )}
