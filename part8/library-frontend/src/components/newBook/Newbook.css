@@ -1,0 +1,21 @@
+.newbook-form{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:1em;
+    padding:1em;
+}
+
+.add-genre-field{
+    border-radius:5px;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:0.5em;
+    background:pink;
+    padding:0.3em
+}

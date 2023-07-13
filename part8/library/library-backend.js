@@ -113,6 +113,8 @@ const typeDefs = `
   type AuthorWithBookCount{
     name: String,
     bookCount: Int,
+    born: Int,
+    id:String,
   }
   type Mutation{                  
       addBook(title: String!,published: String!,author: String!,id: String!,genres: [String]!): Book,
@@ -143,6 +145,8 @@ const resolvers = {
       console.log({soughtAuthors})
       return soughtAuthors.map(author => {
       const authorName = author.name
+      const born = author.born
+      const id = author.id
       const count = books.reduce((accumulator,currentBook) => {
         if(currentBook.author === authorName){
           return accumulator + 1
@@ -154,6 +158,8 @@ const resolvers = {
       return {
         name:authorName,
         bookCount:count,
+        born:born,
+        id:id,
       }
     })
   }},
