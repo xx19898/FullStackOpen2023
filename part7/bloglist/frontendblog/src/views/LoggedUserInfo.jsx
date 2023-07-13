@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import { AppContext } from '../App';
+import '../App.css';
 
 export const LoggedUserSection = () => {
   const { state, dispatch } = useContext(AppContext);
@@ -7,8 +8,11 @@ export const LoggedUserSection = () => {
 
   return (
     <>
-      <p>{loggedInUser} logged in</p>
+      <p className='logged-user-label'>
+        <strong>{loggedInUser}</strong> logged in
+      </p>
       <button
+        className='logout-button'
         onClick={() => dispatch({ type: 'SET_USERINFO', payload: { username: null, token: null } })}
       >
         Logout

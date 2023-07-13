@@ -38,10 +38,6 @@ async function disconnectDB(){
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Blog',
     },
-    user:{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    },
   })
 
   const userSchema = mongoose.Schema({
@@ -54,12 +50,6 @@ async function disconnectDB(){
         ref: 'Blog'
       }
     ],
-    comments: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Comment'
-      }
-    ]
   }) 
   
   const Blog = mongoose.model('Blog', blogSchema)
@@ -75,11 +65,11 @@ async function disconnectDB(){
   }
 
   function getUserInfoById(id){
-    return User.findOne({'_id':id}).populate('blogs',{title:1,author:1,url:1,likes:1})
+    return User.findOne({'_id':id}).populate({path:'blogs',select:{title:1,author:1,url:1,likes:1,comments:1},populate:{path:'comments',select:{text:1}}})
   }
 
   function getBlogById(id){
-    return Blog.findOne({'_id':id}).populate({path:'user',select:{username:1,name:1,_id:1}}).populate({path: 'comments',select:{text:1,user:1},populate:{path:'user',select:{username:1,user_id:1}}})
+    return Blog.findOne({'_id':id}).populate({path:'user',select:{username:1,name:1,_id:1}}).populate({path: 'comments',select:{text:1,_id:1}})
   }
   
   function createBlog(newBlog){

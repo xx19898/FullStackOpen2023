@@ -11,6 +11,7 @@ export const LoginPage = () => {
 
   const login = useMutation(signIn, {
     onSuccess: (data) => {
+      console.log('LOGIN SUCCESS CALLBACK')
       const loginData = data.data;
       dispatch({
         type: 'SET_USERINFO',

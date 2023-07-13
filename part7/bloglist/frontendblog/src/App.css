@@ -6,17 +6,29 @@
   justify-content:center;
   align-items:center;
   margin: 0;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
 }
 
-.form{
-  display:grid;
-  grid-columns:2
-  grid-rows:2;
+.logged-user-label{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:1em;
+  padding-right:0;
+  padding-left:0;
+  background: #fdff77;
+  border-radius: 5px;
+  width:100%; 
 }
 
-.blog-creation-form{
+.notification-body{
+  width:100%;
+  border-radius:5px;
+}
+
+.form{
   display:grid;
   grid-columns:2
   grid-rows:2;
@@ -29,35 +41,6 @@
   .grid-column-start:1;
 }
 
-.blog-list{
-  border-radius: 15px;
-  background:#ffcadb;
-  display:flex;
-  width:100%;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  padding:1em;
-  gap: 4rem;
-}
-
-.notification-body{
-  
-  border-radius:15px;
-}
-
-.blog{
-  background: #dc6087;
-  display:flex;
-  border-radius:5px;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  padding:1em;
-  gap: 4px;
-  width: 80%
-}
-
 .main{
   width: 50%;
   height:100%;
@@ -65,6 +48,15 @@
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  gap:0.5em;
+}
+
+.blog-creation-form-toggle-button{
+  margin-bottom:0.5em;
+}
+
+.create-blog-button{
+  margin-top: 0.5em;
 }
 
 .login-button{

@@ -3,6 +3,7 @@ import { AppContext } from '../../App';
 import { useNavigate, useParams } from 'react-router-dom';
 import { addNewComment, deleteBlog, getBlogDetailed, like } from '../../apiCalls';
 import { useContext, useState } from 'react';
+import './Blogs.css';
 
 const SingleBlogPage = () => {
   const [comment, setComment] = useState('');
@@ -16,6 +17,8 @@ const SingleBlogPage = () => {
   const { data } = useQuery('blogDetailed', () =>
     getBlogDetailed({ token: state.userInfo.token, blogId: blogId }),
   );
+
+  const blog = data != undefined && data != null ? data.data : undefined;
 
   const likeMutation = useMutation(like, {
     onSuccess: async (data, variables) => {
@@ -44,12 +47,14 @@ const SingleBlogPage = () => {
   });
 
   const addCommentMutation = useMutation(addNewComment, {
-    onSucces: (data, variables) => {
-      queryClient.invalidateQueries(['blogDetailed']);
-      queryClient.invalidateQueries(['blogs']);
+    onSuccess: ({ data }, variables) => {
+      console.log('ADDED COMMENT SUCCESS');
+      queryClient.invalidateQueries('blogDetailed');
+      console.log('INVALIDATED!');
+
       dispatch({
         type: 'SET_NOTIFICATION',
-        payload: { text: `Deleted blog with id ${variables}`, type: 'SUCCESS' },
+        payload: { text: `Commented blog with id ${variables}`, type: 'SUCCESS' },
       });
     },
   });
@@ -61,28 +66,43 @@ const SingleBlogPage = () => {
   return (
     <div>
       <p>
-        <strong>{data.title}</strong>
+        <strong>{blog.title}</strong>
       </p>
-      <p>Likes: {data.likes}</p>
-      <button onClick={() => likeMutation.mutate({ token: token, blog: data })}>Like</button>
-      <p>: {data.likes}</p>
-      <p>Author : {data.author}</p>
+      <p>Likes: {blog.likes}</p>
+      <button onClick={() => likeMutation.mutate({ token: token, blog: blog.data })}>Like</button>
+      <p>: {blog.likes}</p>
+      <p>Author : {blog.author}</p>
       <p>
-        Added by <strong>{data.user.username}</strong>
+        Added by <strong>{blog.user.username}</strong>
       </p>
-      {data.user.username === username ? (
-        <button onClick={() => deleteMutation.mutate({ token: token, blogId: data._id })}>
+      {blog.user.username === username ? (
+        <button onClick={() => deleteMutation.mutate({ token: token, blogId: blog._id })}>
           Delete
         </button>
       ) : null}
+      {blog.comments === undefined || blog.comments.length === 0 ? (
+        <p>No comments yet</p>
+      ) : (
+        <>
+          <h2>Comments</h2>
+          <ul className='comments-main'>
+            {blog.comments.map((comment) => (
+              <li className='comment' key={comment._id}>
+                {comment.text}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          addCommentMutation.mutate({ token: token, comment: comment, blogId: data._id });
+          addCommentMutation.mutate({ token: token, comment: comment, blogId: blog._id });
+          setComment('');
         }}
       >
         <label>Comment field</label>
-        <input onChange={(e) => setComment(e.target.value)}></input>
+        <input value={comment} onChange={(e) => setComment(e.target.value)}></input>
         <button>Post comment</button>
       </form>
     </div>

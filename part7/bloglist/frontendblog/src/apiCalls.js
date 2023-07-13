@@ -28,7 +28,7 @@ export async function createBlog({blog,token}) {
 }
 
 export async function getBlogDetailed({blogId,token}){
-  console.log('REFETCHING BLOG!')
+  
   const response = await axios({
     method: 'get',
     url: `${BACKEND_URL}/api/blogs/${blogId}`,
@@ -38,7 +38,7 @@ export async function getBlogDetailed({blogId,token}){
     },
   });
 
-  return response.data;
+  return response;
 }
 
 export async function getBlogs({token}) {
@@ -51,7 +51,7 @@ export async function getBlogs({token}) {
     },
   });
 
-  return response.data;
+  return response;
 }
 
 export async function like({ blog, token }) {
@@ -103,5 +103,5 @@ export async function addNewComment({token,blogId,comment}){
     withCredentials:false,
     headers: { Authorization: `Bearer ${token}` },
   })
-  return response.data;
+  return response;
 }

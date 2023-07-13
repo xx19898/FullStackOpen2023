@@ -3,6 +3,7 @@ import { AppContext } from '../../App';
 import { useQuery } from 'react-query';
 import { getUsersInfo } from '../../apiCalls';
 import { Link } from 'react-router-dom';
+import './Users.css';
 
 export const Users = () => {
   const { state } = useContext(AppContext);
@@ -18,7 +19,7 @@ export const Users = () => {
   if (data === undefined) return <p>Users data is loading...</p>;
 
   return (
-    <table>
+    <table className='users-table-main'>
       <thead>
         <tr>
           <th>User</th>
@@ -27,7 +28,6 @@ export const Users = () => {
       </thead>
       <tbody>
         {data.map((user) => {
-          console.log({user})
           return (
             <tr key={user._id}>
               <th>

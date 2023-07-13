@@ -37,8 +37,11 @@ const BlogCreationForm = () => {
   const [formVisible, setFormVisible] = useState(false);
 
   return (
-    <div>
-      <button onClick={() => setFormVisible(!formVisible)}>
+    <div className='blog-creation-div'>
+      <button
+        className='blog-creation-form-toggle-button'
+        onClick={() => setFormVisible(!formVisible)}
+      >
         {formVisible ? 'Hide blog creation form' : 'Create new blog entry'}
       </button>
       {formVisible ? (
@@ -72,7 +75,7 @@ const BlogCreationForm = () => {
             Url
           </label>
           <input id='urlInput' onChange={(e) => setUrl(e.target.value)} className='input'></input>
-          <button>Create Blog</button>
+          <button className='create-blog-button'>Create Blog</button>
         </form>
       ) : null}
     </div>
