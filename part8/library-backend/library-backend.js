@@ -27,6 +27,9 @@ const server = new ApolloServer({
 
 startStandaloneServer(server, {
   listen: {port: 4000},
+  context: async ({req, res}) => ({
+    authority: getScope(req),
+  }),
 }).then(({url}) => {
   console.log(`Server ready at ${url}`);
 });

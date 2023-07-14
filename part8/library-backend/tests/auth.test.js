@@ -3,14 +3,15 @@ const {typeDefs} = require('../graphql/types');
 const {verifyToken} = require('../auth/authUtility');
 const {resolvers} = require('../graphql/resolvers');
 const {disconnectDB, connectDB} = require('../database/database');
+const expect = require('chai').expect;
 
 
 describe('auth functionality works', () => {
-  beforeAll(async () => {
+  before(async () => {
     await disconnectDB();
     await connectDB();
   });
-  test('creating new user works as it should', async () => {
+  it('creating new user works as it should', async () => {
     const testServer = new ApolloServer({
       typeDefs: typeDefs,
       resolvers: resolvers,
@@ -31,6 +32,6 @@ describe('auth functionality works', () => {
 
     console.log({payload});
     const username = payload.data.username;
-    expect(username).toBe('testUser');
+    expect(username).to.equal('testUser');
   });
 });

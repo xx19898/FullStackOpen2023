@@ -4,23 +4,25 @@ const {
   createJWTToken,
   verifyToken} = require('../auth/authUtility');
 
+const expect = require('chai').expect;
 
-describe.only('testing auth utility', () => {
-  test('Password gets hashed correctly', async () => {
+
+describe('testing auth utility', () => {
+  it('Password gets hashed correctly', async () => {
     const testPassword = 'testPassword';
     const encryptedPassword = await encryptPassword(testPassword);
     console.log({encryptedPassword});
     const compare = await comparePasswords(testPassword, encryptedPassword);
-    expect(compare).toBe(true);
+    expect(compare).to.equal(true);
   });
 
-  test.only(
+  it(
       'Correct token gets generated and can be decoded correctly',
       async () => {
         const testToken = await createJWTToken('testUser');
         const payload = await verifyToken({
           username: 'testUser', token: testToken,
         });
-        expect(payload).not.toBe(undefined);
+        expect(payload).to.not.equal(undefined);
       });
 });

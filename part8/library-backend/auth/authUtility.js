@@ -38,6 +38,31 @@ async function verifyToken({username, token}) {
   return payload;
 }
 
+function getScope(req) {
+  const authorizationString = req.headers.Authorization;
+  if (!authorizationString) return 'GUEST';
+  const authStringSplit = authorizationString.split(' ');
+  if (authStringSplit.length != 2) {
+    throw new GraphQlError('Invalid Authorization header', {
+      extensions: {
+        code: 'BAD_REQUEST',
+      },
+    });
+  };
+  const token = authStringSplit[2];
+  const secret = process.env.JWT_SECRET;
+  try {
+    jwt.verify(token, secret);
+    return 'USER';
+  } catch (e) {
+    throw new GraphQlError('Invalid Authorization header', {
+      extensions: {
+        code: 'BAD_REQUEST',
+      },
+    });
+  }
+}
+
 async function checkPayloadAndVerify({username, token, secret}) {
   try {
     console.log({token});
@@ -55,5 +80,5 @@ async function checkPayloadAndVerify({username, token, secret}) {
 
 module.exports = {
   encryptPassword, comparePasswords,
-  verifyToken, createJWTToken,
+  verifyToken, createJWTToken, getScope,
 };
