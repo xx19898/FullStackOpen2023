@@ -1,0 +1,31 @@
+{
+  "name": "library",
+  "version": "1.0.0",
+  "description": "",
+  "main": "library-backend.js",
+  "scripts": {
+    "test": "dotenv -e .env.test jest",
+    "dev": "dotenv nodemon library-backend.js",
+    "lint": "eslint --fix --ext .js,.jsx ."
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@apollo/server": "^4.7.5",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.3.1",
+    "jest": "^29.6.1",
+    "jsonwebtoken": "^9.0.1",
+    "mongoose": "^7.3.4",
+    "mongoose-unique-validator": "^4.0.0",
+    "nodemon": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.4.2",
+    "eslint": "^8.44.0",
+    "eslint-config-google": "^0.14.0"
+  },
+  "jest":{
+    "testEnvironment":"node"
+  }
+}
