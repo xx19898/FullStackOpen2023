@@ -12,11 +12,11 @@ const typeDefs = `#graphql
     id:String,
   }
   type Book {
-    title: String,
-    published: Int,
-    author: String,
+    title: String!,
+    published: Int!,
+    author: Author!,
     id: String,
-    genres:[String]
+    genres:[String!]!
   }
   type AuthorWithBookCount{
     name: String,
@@ -33,6 +33,10 @@ const typeDefs = `#graphql
         genres: [String]!
         ): Book,
       editAuthor(name:String!,setBornTo: Int!): Author,
+      addAuthor(
+        name:String!,
+        born:Int,
+      ) : Author,
       login(username:String!,password:String!): JWT,
       signUp(username: String!, password: String!): Status,
   }

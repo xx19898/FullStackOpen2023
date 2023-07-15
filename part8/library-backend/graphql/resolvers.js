@@ -1,5 +1,8 @@
 const {comparePasswords, createJWTToken} = require('../auth/authUtility');
 const {getPasswordByUsername} = require('../database/authRepository');
+const {createNewAuthor} = require('../database/authorRepository');
+const {authorizeUser} = require('./apiAuthorization');
+const {GraphQLError} = require('graphql');
 
 const resolvers = {
   Query: {
@@ -44,6 +47,13 @@ const resolvers = {
       books = books.concat(newBook);
       return newBook;
     },
+    addAuthor: async (root, {name, born}, contextValue ) => {
+      console.log('got to resolver');
+      console.log({name, born});
+      console.log({contextValue});
+      authorizeUser(contextValue.authority);
+      return await createNewAuthor({name, born});
+    },
     editAuthor: (root, {name, setBornTo}) => {
       const authorToUpdate = authors.find((author) => author.name === name);
       if (authorToUpdate) {
@@ -52,7 +62,6 @@ const resolvers = {
           else return {...author, born: setBornTo};
         });
         authors = updatedAuthors;
-        console.log({updatedAuthors});
         const updatedAuthor = authors.find((author) => author.name === name);
         return updatedAuthor;
       } else {
@@ -60,9 +69,7 @@ const resolvers = {
       }
     },
     login: async (root, {username, password}) => {
-      console.log({username, password});
       const hashedPassword = await getPasswordByUsername({username: username});
-      console.log({passwordFromDb: hashedPassword});
       const payload = comparePasswords(password, hashedPassword);
       if (payload === undefined) {
         throw new GraphQlError('wrong credentials', {

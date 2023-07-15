@@ -2,7 +2,7 @@ const {
   encryptPassword,
   comparePasswords,
   createJWTToken,
-  verifyToken} = require('../auth/authUtility');
+  verifyToken} = require('../../auth/authUtility');
 
 const expect = require('chai').expect;
 
@@ -11,7 +11,6 @@ describe('testing auth utility', () => {
   it('Password gets hashed correctly', async () => {
     const testPassword = 'testPassword';
     const encryptedPassword = await encryptPassword(testPassword);
-    console.log({encryptedPassword});
     const compare = await comparePasswords(testPassword, encryptedPassword);
     expect(compare).to.equal(true);
   });

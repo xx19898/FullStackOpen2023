@@ -1,5 +1,7 @@
 
 const jwt = require('jsonwebtoken');
+const {GraphQLError} = require('graphql');
+
 require('dotenv').config();
 
 const bcrypt = require('bcryptjs');
@@ -39,22 +41,26 @@ async function verifyToken({username, token}) {
 }
 
 function getScope(req) {
-  const authorizationString = req.headers.Authorization;
+  console.log({headers: req.headers});
+  const authorizationString = req.headers.authorization;
   if (!authorizationString) return 'GUEST';
   const authStringSplit = authorizationString.split(' ');
   if (authStringSplit.length != 2) {
-    throw new GraphQlError('Invalid Authorization header', {
+    throw new GraphQLError('Invalid Authorization header', {
       extensions: {
         code: 'BAD_REQUEST',
       },
     });
   };
-  const token = authStringSplit[2];
+  const token = authStringSplit[1];
   const secret = process.env.JWT_SECRET;
   try {
     jwt.verify(token, secret);
+    console.log('passed verification');
     return 'USER';
   } catch (e) {
+    console.log('caught error when verifying jwt');
+    console.log(JSON.stringify(e, null, 2));
     throw new GraphQlError('Invalid Authorization header', {
       extensions: {
         code: 'BAD_REQUEST',

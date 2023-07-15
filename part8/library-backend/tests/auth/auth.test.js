@@ -1,8 +1,9 @@
 const {ApolloServer} = require('@apollo/server');
-const {typeDefs} = require('../graphql/types');
-const {verifyToken} = require('../auth/authUtility');
-const {resolvers} = require('../graphql/resolvers');
-const {disconnectDB, connectDB} = require('../database/database');
+const {disconnectDB, connectDB} = require('../../database/database');
+const {typeDefs} = require('../../graphql/types');
+const {resolvers} = require('../../graphql/resolvers');
+const {verifyToken} = require('../../auth/authUtility');
+
 const expect = require('chai').expect;
 
 
@@ -24,13 +25,10 @@ describe('auth functionality works', () => {
       variables: {username: 'testUser', password: 'testPassword'},
     });
 
-    console.log(JSON.stringify(response.body, null, 2));
-
     const payload = await verifyToken({
       username: 'testUser',
       token: response.body.singleResult.data.login.token});
 
-    console.log({payload});
     const username = payload.data.username;
     expect(username).to.equal('testUser');
   });

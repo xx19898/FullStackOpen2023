@@ -1,5 +1,5 @@
-const {getUserByUsername} = require('../database/authRepository');
-const {connectDB, resetDB, disconnectDB} = require('../database/database');
+const {getUserByUsername} = require('../../database/authRepository');
+const {connectDB, resetDB, disconnectDB} = require('../../database/database');
 const expect = require('chai').expect;
 
 describe('auth database queries work correctly', () => {
