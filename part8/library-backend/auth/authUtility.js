@@ -8,7 +8,6 @@ const bcrypt = require('bcryptjs');
 
 async function encryptPassword(passwordString) {
   const secret = process.env.JWT_SECRET;
-  console.log();
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(passwordString, salt);
   return hash;
@@ -20,7 +19,6 @@ async function comparePasswords(stringPassword, hash) {
 
 async function createJWTToken(username) {
   const secret = process.env.JWT_SECRET;
-  console.log({creationSecret: secret});
   const token = jwt.sign({
     exp: Math.floor(Date.now() / 1000) + (60 * 60),
     data: {username: username},
@@ -30,18 +28,15 @@ async function createJWTToken(username) {
 
 async function verifyToken({username, token}) {
   const secret = process.env.JWT_SECRET;
-  console.log({token: token});
   const payload = await checkPayloadAndVerify({
     username: username,
     token: token,
     secret: secret,
   });
-  console.log({payload});
   return payload;
 }
 
 function getScope(req) {
-  console.log({headers: req.headers});
   const authorizationString = req.headers.authorization;
   if (!authorizationString) return 'GUEST';
   const authStringSplit = authorizationString.split(' ');
@@ -71,10 +66,7 @@ function getScope(req) {
 
 async function checkPayloadAndVerify({username, token, secret}) {
   try {
-    console.log({token});
-    console.log({secret});
     const payload = jwt.verify(token, secret);
-    console.log({payload});
     if (payload.data.username != username) return undefined;
     return payload;
   } catch (e) {

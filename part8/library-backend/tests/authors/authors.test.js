@@ -8,14 +8,14 @@ const {startServer} = require('../../library-backend');
 const expect = require('chai').expect;
 const request = require('supertest')('http://localhost:5000');
 
-describe.only('authors related api functions correctly', (done) => {
+describe('authors related api functions correctly', (done) => {
   before(async () => {
     await disconnectDB();
     await connectDB();
     await resetDB();
     startServer(5000);
   });
-  it.only('adding new author works as it should', async () => {
+  it('adding new author works as it should', async () => {
     const testServer = new ApolloServer({
       typeDefs: typeDefs,
       resolvers: resolvers,

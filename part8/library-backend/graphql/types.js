@@ -9,14 +9,14 @@ const typeDefs = `#graphql
   type Author{
     born:Int,
     name:String,
-    id:String,
+    _id:String,
   }
   type Book {
     title: String!,
-    published: Int!,
-    author: Author!,
-    id: String,
-    genres:[String!]!
+    published: String,
+    author: Author,
+    _id: String,
+    genres:[String]!
   }
   type AuthorWithBookCount{
     name: String,
@@ -27,10 +27,9 @@ const typeDefs = `#graphql
   type Mutation{
       addBook(
         title: String!,
-        published: String!,
-        author: String!,
-        id: String!,
-        genres: [String]!
+        published: Int,
+        authorId: String,
+        genres: [String]
         ): Book,
       editAuthor(name:String!,setBornTo: Int!): Author,
       addAuthor(

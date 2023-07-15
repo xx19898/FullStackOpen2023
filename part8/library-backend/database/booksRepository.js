@@ -4,4 +4,13 @@ async function deleteAllBooks() {
   return await Book.deleteMany({});
 }
 
-module.exports = {deleteAllBooks};
+async function createBook({title, authorId, published, genres}) {
+  return await Book.create({
+    title: title,
+    author: authorId,
+    published: published,
+    genres: genres,
+  });
+}
+
+module.exports = {deleteAllBooks, createBook};

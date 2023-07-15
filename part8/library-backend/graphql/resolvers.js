@@ -1,6 +1,7 @@
 const {comparePasswords, createJWTToken} = require('../auth/authUtility');
 const {getPasswordByUsername} = require('../database/authRepository');
 const {createNewAuthor} = require('../database/authorRepository');
+const { createBook } = require('../database/booksRepository');
 const {authorizeUser} = require('./apiAuthorization');
 const {GraphQLError} = require('graphql');
 
@@ -39,18 +40,20 @@ const resolvers = {
       });
     }},
   Mutation: {
-    addBook: (root, {title, published, author, id, genres}) => {
-      const newBook = {title, published, author, id, genres};
-      if (!authors.some((author) => author.name === author)) {
-        authors = authors.concat({name: author});
-      }
-      books = books.concat(newBook);
-      return newBook;
+    addBook: async (
+      root,
+      {title, published, authorId, genres},
+      contextValue) => {
+      authorizeUser(contextValue.authority);
+      return await createBook({
+        title: title,
+        published: published,
+        authorId: authorId,
+        genres: genres,
+      });
     },
     addAuthor: async (root, {name, born}, contextValue ) => {
       console.log('got to resolver');
-      console.log({name, born});
-      console.log({contextValue});
       authorizeUser(contextValue.authority);
       return await createNewAuthor({name, born});
     },
