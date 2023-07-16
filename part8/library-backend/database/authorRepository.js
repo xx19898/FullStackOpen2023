@@ -1,14 +1,20 @@
 const {Author} = require('./AuthorSchema');
 
-async function updateAuthor(newUser) {
+async function updateAuthor(newUser, setBornTo) {
+  console.log({setBornTo, userToUpdate: newUser});
   const newUserWithoutVKey = newUser;
   delete newUserWithoutVKey['__v'];
-  console.log({newUserWithoutVKey});
   return await Author.findOneAndReplace({
-    _id: newUser._id,
-    born: newUser.born,
+    _id: newUser.id,
+  },
+  {
+    born: setBornTo,
     name: newUser.name,
   });
+}
+
+async function getAllAuthors() {
+  return await Author.find({});
 }
 
 async function deleteAllAuthors() {
@@ -20,4 +26,9 @@ async function createNewAuthor(newAuthor) {
 }
 
 
-module.exports = {updateAuthor, deleteAllAuthors, createNewAuthor};
+module.exports = {
+  updateAuthor,
+  getAllAuthors,
+  deleteAllAuthors,
+  createNewAuthor,
+};

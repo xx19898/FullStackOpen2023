@@ -20,8 +20,9 @@ async function createBook({title, authorId, published, genres}) {
   return populatedUser;
 }
 
-async function getAllBooks({genre}) {
-  const books = await Book.find({});
+async function getAllBooks(genre) {
+  const books = await Book.find({}).populate('author');
+  if (genre === undefined) return books;
   const rightBooks = !genre ? books : books.filter((book) => {
     return book.genres.some((booksGenre) => booksGenre === genre);
   });

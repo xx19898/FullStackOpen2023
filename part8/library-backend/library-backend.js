@@ -3,6 +3,8 @@ const {startStandaloneServer} = require('@apollo/server/standalone');
 const {typeDefs} = require('./graphql/types');
 const {resolvers} = require('./graphql/resolvers');
 
+const {GraphQLError} = require('graphql');
+
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 const {getScope} = require('./auth/authUtility');

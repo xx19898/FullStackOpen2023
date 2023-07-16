@@ -38,6 +38,7 @@ async function verifyToken({username, token}) {
 
 function getScope(req) {
   const authorizationString = req.headers.authorization;
+  console.log({authorizationString});
   if (!authorizationString) return 'GUEST';
   const authStringSplit = authorizationString.split(' ');
   if (authStringSplit.length != 2) {
@@ -56,7 +57,7 @@ function getScope(req) {
   } catch (e) {
     console.log('caught error when verifying jwt');
     console.log(JSON.stringify(e, null, 2));
-    throw new GraphQlError('Invalid Authorization header', {
+    throw new GraphQLError('Invalid Authorization header', {
       extensions: {
         code: 'BAD_REQUEST',
       },

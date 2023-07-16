@@ -1,28 +1,36 @@
 const {comparePasswords, createJWTToken} = require('../auth/authUtility');
+const { Author } = require('../database/AuthorSchema');
 const {getPasswordByUsername, createNewUser} = require('../database/authRepository');
-const {createNewAuthor} = require('../database/authorRepository');
+const {createNewAuthor, updateAuthor, getAllAuthors} = require('../database/authorRepository');
 const {createBook, getAllBooks} = require('../database/booksRepository');
 const {authorizeUser} = require('./apiAuthorization');
 const {GraphQLError} = require('graphql');
 
 const resolvers = {
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    totalAuthors: () => authors,
-    allBooks: async (root, {genre}) => {
-      return await getAllBooks({genre: genre});
+    bookCount: async () => {
+      const books = await getAllBooks();
+      return books.length;
     },
-    allAuthors: (root, {authorName}) => {
+    authorCount: async () => {
+      const authors = await getAllAuthors();
+      return authors.length;
+    },
+    allBooks: async (root, {genre}) => {
+      return await getAllBooks(genre);
+    },
+    allAuthors: async (root, {authorName}) => {
       console.log({authorName});
-      const soughtAuthors = authorName ? [authors.find((author) => author.name = authorName)] : authors;
-      console.log({soughtAuthors});
+      const authors = await getAllAuthors();
+      const soughtAuthors = authorName ?
+      [authors.find((author) => author.name = authorName)] : authors;
+      const books = await getAllBooks();
       return soughtAuthors.map((author) => {
         const authorName = author.name;
         const born = author.born;
-        const id = author.id;
+        const _id = author._id;
         const count = books.reduce((accumulator, currentBook) => {
-          if (currentBook.author === authorName) {
+          if (currentBook.author.name === authorName) {
             return accumulator + 1;
           } else {
             return accumulator;
@@ -33,7 +41,7 @@ const resolvers = {
           name: authorName,
           bookCount: count,
           born: born,
-          id: id,
+          _id: _id,
         };
       });
     }},
@@ -64,19 +72,11 @@ const resolvers = {
       authorizeUser(contextValue.authority);
       return await createNewAuthor({name, born});
     },
-    editAuthor: (root, {name, setBornTo}) => {
-      const authorToUpdate = authors.find((author) => author.name === name);
-      if (authorToUpdate) {
-        const updatedAuthors = authors.map((author) => {
-          if (author.name !== authorToUpdate.name) return author;
-          else return {...author, born: setBornTo};
-        });
-        authors = updatedAuthors;
-        const updatedAuthor = authors.find((author) => author.name === name);
-        return updatedAuthor;
-      } else {
-        return {};
-      }
+    editAuthor: async (root, {name, setBornTo}, contextValue) => {
+      authorizeUser(contextValue.authority);
+      const user = await Author.findOne({name: name});
+      console.log({user, setBornTo});
+      return updateAuthor(user, setBornTo);
     },
     login: async (root, {username, password}) => {
       const hashedPassword = await getPasswordByUsername({username: username});

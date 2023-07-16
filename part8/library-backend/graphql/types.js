@@ -27,7 +27,7 @@ const typeDefs = `#graphql
     name: String,
     bookCount: Int,
     born: Int,
-    id:String,
+    _id:String,
   }
   type Mutation{
       addBook(
@@ -47,7 +47,6 @@ const typeDefs = `#graphql
   type Query {
     bookCount: Int
     authorCount: Int
-    totalAuthors: [Author]
     allBooks(genre:String): [Book]
     allAuthors(authorName:String): [AuthorWithBookCount]
   }
