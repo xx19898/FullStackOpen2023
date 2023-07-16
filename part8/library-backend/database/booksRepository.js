@@ -1,3 +1,4 @@
+
 const {Book} = require('./BookSchema');
 
 async function deleteAllBooks() {
@@ -5,12 +6,26 @@ async function deleteAllBooks() {
 }
 
 async function createBook({title, authorId, published, genres}) {
-  return await Book.create({
+  const createdUser = await Book.create({
     title: title,
     author: authorId,
     published: published,
     genres: genres,
   });
+
+  const populatedUser = await Book
+      .findOne({_id: createdUser._id})
+      .populate('author');
+
+  return populatedUser;
 }
 
-module.exports = {deleteAllBooks, createBook};
+async function getAllBooks({genre}) {
+  const books = await Book.find({});
+  const rightBooks = !genre ? books : books.filter((book) => {
+    return book.genres.some((booksGenre) => booksGenre === genre);
+  });
+  return rightBooks;
+}
+
+module.exports = {deleteAllBooks, createBook, getAllBooks};

@@ -11,6 +11,11 @@ const typeDefs = `#graphql
     name:String,
     _id:String,
   }
+  type User{
+    username: String,
+    password: String,
+    _id: String,
+  }
   type Book {
     title: String!,
     published: String,
@@ -37,7 +42,7 @@ const typeDefs = `#graphql
         born:Int,
       ) : Author,
       login(username:String!,password:String!): JWT,
-      signUp(username: String!, password: String!): Status,
+      signUp(username: String!, password: String!,favoriteGenre: String): User,
   }
   type Query {
     bookCount: Int

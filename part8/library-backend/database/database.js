@@ -14,6 +14,7 @@ console.log('connecting to', MONGODB_URL);
 async function connectDB() {
   const URL = process.env.DB_URL;
   console.log({URL});
+  console.log('started connecting');
   await mongoose.connect(URL).then(() => {
     console.log('connected to MongoDB');
   }).catch((e) => {
@@ -32,11 +33,6 @@ async function resetDB() {
 
   const newUser = {username: 'testUser', password: 'testPassword'};
   await createNewUser(newUser);
-}
-const env = process.env.env;
-console.log({env});
-if (env != 'test') {
-  connectDB();
 }
 
 

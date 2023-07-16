@@ -6,18 +6,9 @@ const {resolvers} = require('./graphql/resolvers');
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', false);
 const {getScope} = require('./auth/authUtility');
+const { connectDB } = require('./database/database');
 
 require('dotenv').config();
-
-const MONGODB_URL = process.env.MONGODB_URL;
-
-console.log('connecting to', MONGODB_URL);
-
-mongoose.connect(MONGODB_URL).then(() => {
-  console.log('connected to MongoDB');
-}).catch((e) => {
-  console.log('Error connecting to MongoDB: ', e.message);
-});
 
 
 const server = new ApolloServer({
@@ -29,7 +20,7 @@ const server = new ApolloServer({
 function startServer(port) {
   return startStandaloneServer(server, {
     listen: {port: 5000},
-    context: async ({req, res}) => ({
+    context: ({req, res}) => ({
       authority: getScope(req),
     }),
   }).then(({url}) => {
@@ -38,5 +29,6 @@ function startServer(port) {
 }
 
 startServer(4000);
+connectDB();
 
 module.exports = {startServer};

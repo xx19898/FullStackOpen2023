@@ -1,7 +1,7 @@
 const {comparePasswords, createJWTToken} = require('../auth/authUtility');
-const {getPasswordByUsername} = require('../database/authRepository');
+const {getPasswordByUsername, createNewUser} = require('../database/authRepository');
 const {createNewAuthor} = require('../database/authorRepository');
-const { createBook } = require('../database/booksRepository');
+const {createBook, getAllBooks} = require('../database/booksRepository');
 const {authorizeUser} = require('./apiAuthorization');
 const {GraphQLError} = require('graphql');
 
@@ -10,10 +10,8 @@ const resolvers = {
     bookCount: () => books.length,
     authorCount: () => authors.length,
     totalAuthors: () => authors,
-    allBooks: (root, {genre}) => {
-      return !genre ? books : books.filter((book) => {
-        return book.genres.some((booksGenre) => booksGenre === genre);
-      });
+    allBooks: async (root, {genre}) => {
+      return await getAllBooks({genre: genre});
     },
     allAuthors: (root, {authorName}) => {
       console.log({authorName});
@@ -41,19 +39,28 @@ const resolvers = {
     }},
   Mutation: {
     addBook: async (
-      root,
-      {title, published, authorId, genres},
-      contextValue) => {
+        root,
+        {title, published, authorId, genres},
+        contextValue) => {
+      if (title.length < 5) {
+        throw new GraphQLError(
+            'title is too short, it has to be at least 5 chars long',
+        );
+      }
       authorizeUser(contextValue.authority);
-      return await createBook({
+      const createdUser = await createBook({
         title: title,
         published: published,
         authorId: authorId,
         genres: genres,
       });
+      console.log({createdUser});
+      return createdUser;
     },
     addAuthor: async (root, {name, born}, contextValue ) => {
-      console.log('got to resolver');
+      if (name.length < 4) {
+        throw new GraphQLError('author name is too short');
+      }
       authorizeUser(contextValue.authority);
       return await createNewAuthor({name, born});
     },
@@ -83,6 +90,9 @@ const resolvers = {
       };
       const jwtToken = await createJWTToken(username);
       return {token: jwtToken};
+    },
+    signUp: async (root, {username, password}) => {
+      return createNewUser({username, password});
     },
   },
 };
