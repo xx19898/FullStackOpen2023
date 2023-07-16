@@ -4,15 +4,22 @@ import { gql, useMutation } from '@apollo/client'
 
 
 const ADD_NEW_BOOK = gql`
-  mutation addBook($title: String!,$published:String!,$author: String!,
-    $id:String!,$genres: [String]!){
+  mutation addBook(
+    $title: String!,
+    $published:Int!,
+    $authorName: String!,
+    $genres: [String]!
+    ){
     addBook(title: $title, published: $published,
-       author: $author, id:$id,genres:$genres){
-        title
-        published
-        author
-        id
-        genres
+       authorName: $authorName, genres:$genres){
+        title,
+        published,
+        author{
+          name,
+          born,
+        }
+        _id,
+        genres,
        }
   }
 `
@@ -40,7 +47,13 @@ const NewBook = () => {
   const submit = async (event) => {
     event.preventDefault()
     const randomId = generateId(10)
-    addBook({variables:{title:title,author:author,published:published,genres:genres,id:randomId}})
+    addBook({
+      variables:{
+        title:title,
+        authorName:author,
+        published: parseInt(published),
+        genres:genres,
+        }})
 
     setTitle('')
     setPublished('')
@@ -57,7 +70,7 @@ const NewBook = () => {
   return (
     <div>
       <form className="newbook-form" onSubmit={submit}>
-        
+
           <label>title</label>
           <input
             value={title}

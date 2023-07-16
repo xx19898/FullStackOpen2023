@@ -1,23 +1,26 @@
 
+const { Author } = require('./AuthorSchema');
 const {Book} = require('./BookSchema');
 
 async function deleteAllBooks() {
   return await Book.deleteMany({});
 }
 
-async function createBook({title, authorId, published, genres}) {
-  const createdUser = await Book.create({
+async function createBook({title, authorName, published, genres}) {
+  const author = await Author.findOne({name: authorName});
+
+  const createdBook = await Book.create({
     title: title,
-    author: authorId,
+    author: author._id,
     published: published,
     genres: genres,
   });
 
-  const populatedUser = await Book
-      .findOne({_id: createdUser._id})
+  const populatedBook = await Book
+      .findOne({_id: createdBook._id})
       .populate('author');
 
-  return populatedUser;
+  return populatedBook;
 }
 
 async function getAllBooks(genre) {

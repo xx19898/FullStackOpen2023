@@ -48,7 +48,7 @@ const resolvers = {
   Mutation: {
     addBook: async (
         root,
-        {title, published, authorId, genres},
+        {title, published, authorName, genres},
         contextValue) => {
       if (title.length < 5) {
         throw new GraphQLError(
@@ -56,14 +56,14 @@ const resolvers = {
         );
       }
       authorizeUser(contextValue.authority);
-      const createdUser = await createBook({
+      const createdBook = await createBook({
         title: title,
         published: published,
-        authorId: authorId,
+        authorName: authorName,
         genres: genres,
       });
-      console.log({createdUser});
-      return createdUser;
+      console.log({createdBook});
+      return createdBook;
     },
     addAuthor: async (root, {name, born}, contextValue ) => {
       if (name.length < 4) {

@@ -5,7 +5,7 @@ const ALL_AUTHORS = gql`
     allAuthors{
       name
       born
-      id
+      _id
       bookCount
     }
   }`

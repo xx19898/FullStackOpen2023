@@ -33,7 +33,7 @@ const typeDefs = `#graphql
       addBook(
         title: String!,
         published: Int,
-        authorId: String,
+        authorName: String,
         genres: [String]
         ): Book,
       editAuthor(name:String!,setBornTo: Int!): Author,

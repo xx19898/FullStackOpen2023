@@ -5,12 +5,45 @@ import {
     createBrowserRouter,
     RouterProvider,
   } from "react-router-dom";
+  import { setContext } from '@apollo/client/link/context';
 
-import { ApolloClient, ApolloProvider, InMemoryCache, gql } from '@apollo/client'
+import { ApolloClient, ApolloProvider, InMemoryCache, createHttpLink, gql } from '@apollo/client'
+
+
+const httpLink = createHttpLink({
+
+  uri: 'http://localhost:5000',
+
+});
+
+
+const authLink = setContext((_, { headers }) => {
+
+  // get the authentication token from local storage if it exists
+
+  const token = JSON.parse(localStorage.getItem('authorization')).token
+
+  console.log({token})
+  // return the headers to the context so httpLink can read them
+
+  return {
+
+    headers: {
+
+      authorization: token ? `Bearer ${token}` : "",
+
+    }
+
+  }
+
+});
+
+
 
 const client = new ApolloClient({
-  uri: 'http://localhost:4000',
-  cache: new InMemoryCache(),
+  uri: 'http://localhost:5000',
+  link: authLink.concat(httpLink),
+  cache: new InMemoryCache()
 })
 
 

@@ -10,6 +10,8 @@ import {
   createBrowserRouter,
 } from "react-router-dom";
 import SetBirth from './components/setYearOfBirth/SetBirth'
+import Login from './components/authComp/Login'
+import SignUp from './components/authComp/signUp'
 const ALL_AUTHORS = gql`
   query {
     totalAuthors{
@@ -36,7 +38,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/authors",
-    element: 
+    element:
     <>
     <Navigation/>
     <Authors/>
@@ -48,6 +50,22 @@ export const router = createBrowserRouter([
     <>
     <Navigation />
     <Books />
+    </>
+  },
+  {
+    path:'/login',
+    element:
+    <>
+    <Navigation />
+    <Login />
+    </>
+  },
+  {
+    path:'/signup',
+    element:
+    <>
+    <Navigation />
+    <SignUp />
     </>
   },
   {
