@@ -6,6 +6,7 @@ const LOGIN = gql`
     mutation login($username:String!,$password:String!){
         login(username: $username,password:$password){
             token
+            favoriteGenre
         }
     }`
 const Login = () => {
@@ -17,9 +18,14 @@ const Login = () => {
     const [login] = useMutation(
         LOGIN,{
             onCompleted:(data)  => {
-                console.log({data})
+                console.log({data:data.login})
                 console.log({token:data.login.token})
-                localStorage.setItem('authorization',JSON.stringify({token:data.login.token}))
+                localStorage.setItem(
+                    'userInfo',
+                    JSON.stringify({
+                        token:data.login.token,
+                        favoriteGenre: data.login.favoriteGenre
+                    }))
                 navigate('/')
             }
         })

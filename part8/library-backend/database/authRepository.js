@@ -5,9 +5,13 @@ function deleteAllUsers() {
   return User.deleteMany({});
 }
 
-async function createNewUser({username, password}) {
+async function createNewUser({username, password, favoriteGenre}) {
   const encryptedPassword = await encryptPassword(password);
-  return User.create({password: encryptedPassword, username: username});
+  return User.create({
+    password: encryptedPassword,
+    username: username,
+    favoriteGenre: favoriteGenre,
+  });
 }
 
 async function getPasswordByUsername({username}) {

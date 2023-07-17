@@ -12,6 +12,7 @@ import {
 import SetBirth from './components/setYearOfBirth/SetBirth'
 import Login from './components/authComp/Login'
 import SignUp from './components/authComp/signUp'
+import RecommendedBooks from './components/recommendedBooks/RecommendedBooks'
 const ALL_AUTHORS = gql`
   query {
     totalAuthors{
@@ -66,6 +67,14 @@ export const router = createBrowserRouter([
     <>
     <Navigation />
     <SignUp />
+    </>
+  },
+  {
+    path: '/recommendedbooks',
+    element:
+    <>
+    <Navigation/>
+    <RecommendedBooks />
     </>
   },
   {

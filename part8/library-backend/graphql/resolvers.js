@@ -1,6 +1,6 @@
 const {comparePasswords, createJWTToken} = require('../auth/authUtility');
 const { Author } = require('../database/AuthorSchema');
-const {getPasswordByUsername, createNewUser} = require('../database/authRepository');
+const {getPasswordByUsername, createNewUser, getUserByUsername} = require('../database/authRepository');
 const {createNewAuthor, updateAuthor, getAllAuthors} = require('../database/authorRepository');
 const {createBook, getAllBooks} = require('../database/booksRepository');
 const {authorizeUser} = require('./apiAuthorization');
@@ -17,6 +17,8 @@ const resolvers = {
       return authors.length;
     },
     allBooks: async (root, {genre}) => {
+      console.log({genre});
+      if(genre === 'All') return await getAllBooks();
       return await getAllBooks(genre);
     },
     allAuthors: async (root, {authorName}) => {
@@ -89,10 +91,11 @@ const resolvers = {
         });
       };
       const jwtToken = await createJWTToken(username);
-      return {token: jwtToken};
+      const user = await getUserByUsername({username: username});
+      return {token: jwtToken, favoriteGenre: user.favoriteGenre};
     },
-    signUp: async (root, {username, password}) => {
-      return createNewUser({username, password});
+    signUp: async (root, {username, password, favoriteGenre}) => {
+      return createNewUser({username, password, favoriteGenre});
     },
   },
 };

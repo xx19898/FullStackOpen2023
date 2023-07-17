@@ -20,6 +20,7 @@ export const Navigation = () => {
                 <Link className="nav-button" to={'/newbook'} onClick={() => {setActive('newbook')}}>{active === 'newbook' ? <strong>Create new book</strong> : <>Create new book</>}</Link>
                 <Link className="nav-button" to={'/newauthor'} onClick={() => setActive('newauthor')}>{active === 'newauthor' ? <strong>Create new author</strong> : <>Create new author</>}</Link>
                 <Link className="nav-button" to={'/setbirthdate'} onClick={() => setActive('editbirthdate')}>{active === 'editbirthdate' ? <strong>Edit author birthdate</strong> : <>Edit author birthdate</>}</Link>
+                <Link className="nav-button" to={'/recommendedbooks'} onClick={() => setActive('recbooks')}>{active === 'recbooks' ? <strong>Recommended books</strong> : <>Recommended books</>}</Link>
                 <Link className="nav-button" to={'/'} onClick={ () => {
                     setActive('books')
                     localStorage.clear();

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import './Newbook.css'
-import { gql, useMutation } from '@apollo/client'
+import { gql, useApolloClient, useMutation } from '@apollo/client'
+import { ALL_BOOKS } from '../Books'
 
 
 const ADD_NEW_BOOK = gql`
@@ -43,6 +44,7 @@ const NewBook = () => {
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
+  const client = useApolloClient()
 
   const submit = async (event) => {
     event.preventDefault()
@@ -53,6 +55,11 @@ const NewBook = () => {
         authorName:author,
         published: parseInt(published),
         genres:genres,
+        },onCompleted: async (data) => {
+            console.log('REFETCHING QUERIES')
+            client.cache.evict({__typename:"Book"})
+            client.cache.gc()
+            client.refetchQueries(ALL_BOOKS)
         }})
 
     setTitle('')

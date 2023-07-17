@@ -1,7 +1,8 @@
 
 const typeDefs = `#graphql
-  type JWT{
-    token: String
+  type LoginResponse{
+    token: String,
+    favoriteGenre: String,
   },
   type Status{
     status: String
@@ -14,6 +15,7 @@ const typeDefs = `#graphql
   type User{
     username: String,
     password: String,
+    favoriteGenre: String,
     _id: String,
   }
   type Book {
@@ -41,7 +43,7 @@ const typeDefs = `#graphql
         name:String!,
         born:Int,
       ) : Author,
-      login(username:String!,password:String!): JWT,
+      login(username:String!,password:String!): LoginResponse,
       signUp(username: String!, password: String!,favoriteGenre: String): User,
   }
   type Query {
