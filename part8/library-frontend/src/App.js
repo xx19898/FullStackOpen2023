@@ -17,7 +17,7 @@ const ALL_AUTHORS = gql`
   query {
     totalAuthors{
       name
-      id
+      _id
       born
     }
   }`

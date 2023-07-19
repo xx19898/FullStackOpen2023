@@ -23,10 +23,7 @@ const SignUp = () => {
     const [favGenre,setFavGenre] = useState('');
 
     const navigate = useNavigate()
-    const [mutate] = useMutation(SIGN_UP,{
-        onCompleted: (data) => {
-            console.log({data});
-        }});
+    const [mutate] = useMutation(SIGN_UP);
 
     return(
         <form className="form" onSubmit={(e) => {

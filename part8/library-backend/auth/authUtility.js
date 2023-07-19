@@ -38,7 +38,6 @@ async function verifyToken({username, token}) {
 
 function getScope(req) {
   const authorizationString = req.headers.authorization;
-  console.log({authorizationString});
   if (!authorizationString) return 'GUEST';
   const authStringSplit = authorizationString.split(' ');
   if (authStringSplit.length != 2) {
@@ -52,11 +51,8 @@ function getScope(req) {
   const secret = process.env.JWT_SECRET;
   try {
     jwt.verify(token, secret);
-    console.log('passed verification');
     return 'USER';
   } catch (e) {
-    console.log('caught error when verifying jwt');
-    console.log(JSON.stringify(e, null, 2));
     throw new GraphQLError('Invalid Authorization header', {
       extensions: {
         code: 'BAD_REQUEST',
@@ -71,7 +67,6 @@ async function checkPayloadAndVerify({username, token, secret}) {
     if (payload.data.username != username) return undefined;
     return payload;
   } catch (e) {
-    console.log({e});
     return undefined;
   }
 }

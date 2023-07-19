@@ -2,13 +2,14 @@ import {Link} from 'react-router-dom'
 import {useState} from 'react';
 import './Navigation.css'
 import { isAuthorized } from '../authComp/authUtility';
+import { useApolloClient } from '@apollo/client';
 
 export const Navigation = () => {
     const [active,setActive] = useState('books')
 
+    const client = useApolloClient()
     const authorization = isAuthorized()
     const authOk = authorization ? true : false
-    console.log({authorization})
 
     return(
         <nav className="main-navigation">
@@ -24,6 +25,7 @@ export const Navigation = () => {
                 <Link className="nav-button" to={'/'} onClick={ () => {
                     setActive('books')
                     localStorage.clear();
+                    client.resetStore();
                     }} >Logout</Link>
                 </>
                 :

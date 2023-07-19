@@ -15,8 +15,6 @@ const Authors = () => {
 
   if(!data) return <p>Authors loading...</p>
 
-  console.log({data})
-
   const authors = data.allAuthors
 
   return (

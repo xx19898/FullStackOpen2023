@@ -1,10 +1,25 @@
 const {comparePasswords, createJWTToken} = require('../auth/authUtility');
-const { Author } = require('../database/AuthorSchema');
-const {getPasswordByUsername, createNewUser, getUserByUsername} = require('../database/authRepository');
-const {createNewAuthor, updateAuthor, getAllAuthors} = require('../database/authorRepository');
-const {createBook, getAllBooks} = require('../database/booksRepository');
+const {Author} = require('../database/AuthorSchema');
+const {
+  getPasswordByUsername,
+  createNewUser,
+  getUserByUsername,
+} = require('../database/authRepository');
+const {
+  createNewAuthor,
+  updateAuthor,
+  getAllAuthors,
+} = require('../database/authorRepository');
+const {
+  createBook,
+  getAllBooks,
+} = require('../database/booksRepository');
 const {authorizeUser} = require('./apiAuthorization');
 const {GraphQLError} = require('graphql');
+
+
+const {PubSub} = require('graphql-subscriptions');
+const pubsub = new PubSub();
 
 const resolvers = {
   Query: {
@@ -18,7 +33,7 @@ const resolvers = {
     },
     allBooks: async (root, {genre}) => {
       console.log({genre});
-      if(genre === 'All') return await getAllBooks();
+      if (genre === 'All') return await getAllBooks();
       return await getAllBooks(genre);
     },
     allAuthors: async (root, {authorName}) => {
@@ -65,6 +80,7 @@ const resolvers = {
         genres: genres,
       });
       console.log({createdBook});
+      pubsub.publish('BOOK_ADDED', {bookAdded: createdBook});
       return createdBook;
     },
     addAuthor: async (root, {name, born}, contextValue ) => {
@@ -96,6 +112,11 @@ const resolvers = {
     },
     signUp: async (root, {username, password, favoriteGenre}) => {
       return createNewUser({username, password, favoriteGenre});
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator('BOOK_ADDED'),
     },
   },
 };

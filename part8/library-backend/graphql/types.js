@@ -52,6 +52,9 @@ const typeDefs = `#graphql
     allBooks(genre:String): [Book]
     allAuthors(authorName:String): [AuthorWithBookCount]
   }
+  type Subscription {
+    bookAdded: Book
+  }
 `;
 
 module.exports = {typeDefs};

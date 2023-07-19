@@ -18,9 +18,7 @@ query ($genre: String){
 
 const RecommendedBooks = () => {
     const favoriteGenre = extractFavGenre()
-    console.log({favoriteGenre})
     const {data:recBooks} = useQuery(recBooksQuery,{variables:{genre:favoriteGenre}})
-    console.log({recBooks});
     return(
         <div>
             {

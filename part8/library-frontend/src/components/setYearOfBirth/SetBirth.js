@@ -30,30 +30,27 @@ const SetBirth = () => {
             ALL_AUTHORS
         ]
     })
-    
+
     if(!data) return <p>Loading authors...</p>
 
     const authors = data.allAuthors
 
-    
 
-    
 
-    console.log({authors})
+
+
+
 
     function getBirthDate(authorName,authorsparam){
-        console.log({authorsparam})
-        console.log({authorName})
         if(authorName === '') return undefined
         const authorWithSameName = authorsparam.find((author) => author.name === authorName)
-        console.log({date:authorWithSameName.born})
         return authorWithSameName.born
     }
 
     const options = authors.map((author) => {
         return {label:author.name, value:author.name}})
 
-    
+
     return(
         <div>
             <p>Current birth year of the chosen author: <strong>{!getBirthDate(selected,authors) ? 'undefined' : getBirthDate(selected,authors)}</strong></p>

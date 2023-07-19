@@ -18,9 +18,7 @@ const Login = () => {
     const [login] = useMutation(
         LOGIN,{
             onCompleted:(data)  => {
-                console.log({data:data.login})
-                console.log({token:data.login.token})
-                localStorage.setItem(
+                 localStorage.setItem(
                     'userInfo',
                     JSON.stringify({
                         token:data.login.token,

@@ -54,13 +54,8 @@ const NewBook = () => {
         title:title,
         authorName:author,
         published: parseInt(published),
-        genres:genres,
-        },onCompleted: async (data) => {
-            console.log('REFETCHING QUERIES')
-            client.cache.evict({__typename:"Book"})
-            client.cache.gc()
-            client.refetchQueries(ALL_BOOKS)
-        }})
+        genres:genres
+    }})
 
     setTitle('')
     setPublished('')
