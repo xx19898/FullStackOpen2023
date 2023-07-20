@@ -78,7 +78,7 @@ const diagnoseData = [
   }
 ];
 
-export type Diagnose {
+export type Diagnose = {
   code: string,
   name: string,
   latin: string

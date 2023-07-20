@@ -1,25 +1,12 @@
-export enum Gender{
-  'male'='male',
-  'female'='female',
-  'other'='other',
-}
-
-export type Patient = {
-    id: string | undefined,
-    name: string,
-    dateOfBirth: string,
-    ssn: string
-    gender: Gender,
-    occupation: string,
-}
-
-const patientsData: Patient[] = [
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const patientsData = [
     {
         "id": "d2773336-f723-11e9-8f0b-362b9e155667",
         "name": "John McClane",
         "dateOfBirth": "1986-07-09",
         "ssn": "090786-122X",
-        "gender": Gender.male,
+        "gender": "male",
         "occupation": "New york city cop"
     },
     {
@@ -27,7 +14,7 @@ const patientsData: Patient[] = [
         "name": "Martin Riggs",
         "dateOfBirth": "1979-01-30",
         "ssn": "300179-77A",
-        "gender": Gender.male,
+        "gender": "male",
         "occupation": "Cop"
     },
     {
@@ -35,7 +22,7 @@ const patientsData: Patient[] = [
         "name": "Hans Gruber",
         "dateOfBirth": "1970-04-25",
         "ssn": "250470-555L",
-        "gender": Gender.other,
+        "gender": "other",
         "occupation": "Technician"
     },
     {
@@ -43,7 +30,7 @@ const patientsData: Patient[] = [
         "name": "Dana Scully",
         "dateOfBirth": "1974-01-05",
         "ssn": "050174-432N",
-        "gender": Gender.female,
+        "gender": "female",
         "occupation": "Forensic Pathologist"
     },
     {
@@ -51,9 +38,8 @@ const patientsData: Patient[] = [
         "name": "Matti Luukkainen",
         "dateOfBirth": "1971-04-09",
         "ssn": "090471-8890",
-        "gender": Gender.male,
+        "gender": "male",
         "occupation": "Digital evangelist"
     }
 ];
-
-export default patientsData;
+exports.default = patientsData;
