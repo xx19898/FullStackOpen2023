@@ -1,6 +1,6 @@
 import diaryData from '../../data/entries';
 
-import { 
+import {
   NonSensitiveDiaryEntry, DiaryEntry, NewDiaryEntry
  } from '../types';
 

@@ -1,25 +1,37 @@
+/* eslint-disable no-inner-declarations */
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import {useState,useEffect} from 'react';
+import { Diary, getDiaries } from './service';
+import DiaryComp from './Diary';
+import DiaryForm from './DiaryForm';
+import './index.css'
+
+export const BASE_URL = 'http://localhost:3001';
 
 function App() {
+  const [shouldUpdateDiaries,setShouldUpdateDiaries] = useState<boolean>(true)
+  const [diaries,setDiaries] = useState<Diary[]>([])
+
+  useEffect(() => {
+    if(shouldUpdateDiaries){
+      const fetchData = async () => {
+        const {data} = await getDiaries()
+        setDiaries(data)
+      }
+      fetchData()
+      setShouldUpdateDiaries(false)
+      }
+    },[true])
+    console.log({diaries})
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+    <h1>Flight Diaries</h1>
+    {
+      diaries.map((diary) => <DiaryComp {...diary} key={diary.id} />)
+    }
+    <DiaryForm />
+    </>
+
   );
 }
 
