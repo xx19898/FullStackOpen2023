@@ -16,12 +16,12 @@ const App = () => {
     void axios.get<void>(`${apiBaseUrl}/ping`);
 
     const fetchPatientList = async () => {
-      const patients = await patientService.getAll();
-      setPatients(patients);
+      const data = await patientService.getAll();
+      setPatients(data)
     };
     void fetchPatientList();
   }, []);
-  
+  console.log({patients})
   return (
     <div className="App">
       <Router>
