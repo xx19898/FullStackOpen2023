@@ -1,0 +1,46 @@
+.patient-container{
+    width:50%;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    background: pink;
+    border-radius:5px;
+    padding:2em;
+    margin-top:2em;
+}
+
+
+.healthcheck-entry-container{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    background: #a9e794;
+    border-radius:5px;
+    padding:2em;
+    margin-top:2em;
+}
+
+.hospital-entry-container{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    background: #e3d93f;
+    border-radius:5px;
+    padding:2em;
+    margin-top:2em;
+}
+
+.occ-healthcare-entry-container{
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    justify-content: center;
+    background: #d35124;
+    border-radius:5px;
+    padding:2em;
+    margin-top:2em;
+
+}

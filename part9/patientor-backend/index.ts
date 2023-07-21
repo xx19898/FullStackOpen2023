@@ -1,9 +1,11 @@
 import express, { Express, } from 'express';
-import patientsData, { Gender, Patient } from './data/patients';
+import { Gender, Patient } from './data/types';
 const app: Express = express();
 const cors = require('cors');
 import bodyParser from 'body-parser'
 import { toPatient } from './inputValidation/patientValidation';
+import patientsData, { getPatientById } from './data/patients';
+import diagnoseData, { Diagnosis } from './data/diagnoses';
 app.use(cors());
 app.use(bodyParser.json())
 const port = 3000;
@@ -12,12 +14,24 @@ const port = 3000;
     return res.json({'ping':'ping'})
 });
 
-type PatientWithOutSSN = Omit<Patient,'ssn'>
+type NonSensitivePatient = Omit<Patient,'ssn' | 'entries'>
 
 app.get('/api/patients',(req,res) => {
-  const soughtData:PatientWithOutSSN[] = patientsData
+  const soughtData:NonSensitivePatient[] = patientsData
 
   return res.json([...soughtData])
+})
+
+app.get('/api/diagnosis',(req,res) => {
+  const soughtData:Diagnosis[] = diagnoseData
+  return res.json([...soughtData])
+})
+
+app.get('/api/patients/:id',(req,res) => {
+  const id = req.params.id
+  const patients = patientsData
+  const patient = getPatientById(id,patients)
+  return res.json(patient)
 })
 
 app.post('/api/patients', (req,res) => {
@@ -31,7 +45,6 @@ app.post('/api/patients', (req,res) => {
       res.status(400).json({e})
     }
 })
-
 
 app.listen(port, () => {
     console.log(`Exercises app listening on port ${port}`);

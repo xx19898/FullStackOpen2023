@@ -6,8 +6,9 @@ import { Button, Divider, Container, Typography } from '@mui/material';
 import { apiBaseUrl } from "./constants";
 import { Patient } from "./types";
 
-import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
+import { getAllPatients } from "./services/patients";
+import { PatientDetail } from "./components/PatientDetail";
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -16,7 +17,7 @@ const App = () => {
     void axios.get<void>(`${apiBaseUrl}/ping`);
 
     const fetchPatientList = async () => {
-      const data = await patientService.getAll();
+      const data = await getAllPatients();
       setPatients(data)
     };
     void fetchPatientList();
@@ -35,6 +36,9 @@ const App = () => {
           <Divider hidden />
           <Routes>
             <Route path="/" element={<PatientListPage patients={patients} setPatients={setPatients} />} />
+          </Routes>
+          <Routes>
+            <Route path="/patient/:id" element={<PatientDetail/>} />
           </Routes>
         </Container>
       </Router>

@@ -1,5 +1,6 @@
-import { Gender, Patient } from "../data/patients";
+
 import { v1 as uuid } from 'uuid';
+import { Gender, Patient } from '../data/types';
 
 const isString = (text: unknown): text is string => {
     return typeof text === 'string' || text instanceof String;
@@ -49,6 +50,7 @@ const isString = (text: unknown): text is string => {
         name: parseStringParam(patientObj.name,'name'),
         occupation: parseStringParam(patientObj.occupation,'occupation'),
         ssn: parseStringParam(patientObj.ssn,'ssn'),
+        entries: []
       }
       return newPatient
     }
