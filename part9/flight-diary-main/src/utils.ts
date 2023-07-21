@@ -47,9 +47,12 @@ const parseVisibility = (visibility: unknown): Visibility => {
 };
 
 const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
+  console.log({object})
   if ( !object || typeof object !== 'object' ) {
     throw new Error('Incorrect or missing data');
   }
+  console.log({commentok: 'comment' in object})
+  console.log({dateok: 'date' in object})
 
   if ('comment' in object && 'date' in object && 'weather' in object && 'visibility' in object)  {
     const newEntry: NewDiaryEntry = {
@@ -58,7 +61,7 @@ const toNewDiaryEntry = (object: unknown): NewDiaryEntry => {
       date: parseDate(object.date),
       comment: parseComment(object.comment)
     };
-  
+
     return newEntry;
   }
 

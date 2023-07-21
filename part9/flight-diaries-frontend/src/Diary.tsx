@@ -1,7 +1,7 @@
 import { Diary } from "./service";
 import React from 'react';
 
-const DiaryComp = ({date,id,visibility,weather}:Diary) => {
+const DiaryComp = ({date,visibility,weather}:Diary) => {
 
     return(
         <div className="diary-main">

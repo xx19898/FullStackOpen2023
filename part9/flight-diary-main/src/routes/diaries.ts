@@ -22,7 +22,11 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   try {
-    const newDiaryEntry = toNewDiaryEntry(req.body);
+    const data = req.body.data[0]
+    console.log({datax:data})
+    const comment = data.comment
+    console.log({comment})
+    const newDiaryEntry = toNewDiaryEntry(data);
     const addedEntry = diaryService.addDiary(newDiaryEntry);
     res.json(addedEntry);
   } catch (error: unknown) {

@@ -11,16 +11,17 @@ export type Weather = 'rainy' | 'sunny' | 'windy' | 'cloudy'
 
 export type Diary = {
   id: number,
-  date: string,
+  date: Date,
   weather: string,
   visibility: string,
+  comment:string,
 }
 
 
 type IDiaryCreation = Omit<Diary,'id'>
 
 async function createDiary(newDiary:IDiaryCreation){
-    const {data} = await axios.post(`BASE_URL`,{data: [newDiary] })
+    const {data} = await axios.post(`${BASE_URL}/api/diaries`,{data: [newDiary] })
     return data
 }
 
