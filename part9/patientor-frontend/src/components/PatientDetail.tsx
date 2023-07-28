@@ -4,12 +4,16 @@ import { getPatientDetail } from "../services/patients"
 import { useEffect, useState } from "react"
 import '../App.css'
 import { getDiagnosis } from "../services/diagnosis"
+import AddEntryForm from "./AddEntry/AddEntryForm"
+import { Button } from "@mui/material"
 
 
 export const PatientDetail = () => {
     const patientId = useParams().id
     const [patients,setPatients] = useState<Patient | undefined>(undefined)
     const [diagnosis,setDiagnosis] = useState<Diagnosis[] | undefined>(undefined)
+    const [addEntryOpen,setAddEntryOpen] = useState<boolean>(false)
+
     useEffect(() => {
         async function fetchData(){
             if(patientId !== undefined){
@@ -29,6 +33,10 @@ export const PatientDetail = () => {
         <div className="patient-container">
             {
                 patients ? patientVisualisation(patients) : <p>Sorry, user information is unavailable for the moment</p>
+            }
+            <Button variant="contained" onClick={() => setAddEntryOpen(!addEntryOpen)}>Add new entry</Button>
+            {
+                addEntryOpen && <AddEntryForm />
             }
         </div>
 
