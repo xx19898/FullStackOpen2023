@@ -6,6 +6,7 @@ import bodyParser from 'body-parser'
 import { toPatient } from './inputValidation/patientValidation';
 import patientsData, { getPatientById } from './data/patients';
 import diagnoseData, { Diagnosis } from './data/diagnoses';
+import { validateNewEntry } from './inputValidation/entryValidation';
 app.use(cors());
 app.use(bodyParser.json())
 const port = 3000;
@@ -32,6 +33,20 @@ app.get('/api/patients/:id',(req,res) => {
   const patients = patientsData
   const patient = getPatientById(id,patients)
   return res.json(patient)
+})
+
+app.post('/api/patients/:id',(req,res) => {
+  const id = req.params.id
+
+})
+
+app.post('/api/patients/:id/entries',(req,res) => {
+  const userId = req.params.id
+  try{
+    validateNewEntry(req.body)
+  }catch(e){
+    res.status(400).json(e)
+  }
 })
 
 app.post('/api/patients', (req,res) => {

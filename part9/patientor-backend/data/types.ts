@@ -15,12 +15,12 @@ export enum Gender{
     "CriticalRisk" = 3
   }
 
-  interface HealthCheckEntry extends BaseEntry {
+  export interface HealthCheckEntry extends BaseEntry {
     type: "HealthCheck";
     healthCheckRating: HealthCheckRating;
   }
 
-  interface BaseEntry {
+  export interface BaseEntry {
     id: string;
     description: string;
     date: string;

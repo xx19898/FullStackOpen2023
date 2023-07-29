@@ -19,7 +19,6 @@ export const PatientDetail = () => {
             if(patientId !== undefined){
                 const patientsData = await getPatientDetail(patientId)
                 const diagnosisData = await getDiagnosis()
-                console.log({diagnosisData})
                 setPatients(patientsData)
                 setDiagnosis(diagnosisData)
             }else{

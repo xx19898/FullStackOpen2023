@@ -1,7 +1,8 @@
-import { Autocomplete, AutocompleteRenderInputParams, Button, Checkbox, FormControlLabel, FormGroup, TextField } from "@mui/material"
+import { Autocomplete, AutocompleteRenderInputParams, Button, Card, Checkbox, FormControlLabel, FormGroup, Radio, RadioGroup, TextField } from "@mui/material"
 import { useContext,useMemo, useState } from "react"
 import Select from 'react-select';
 import '../../App.css'
+import { v4 as uuidv4 } from 'uuid';
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { HealthCheckAddInfo, HospitalEntryAdditionalInfo, OccHealthEntryAddInfo } from "../../types";
 import dayjs from "dayjs";
@@ -18,12 +19,7 @@ const AddEntryForm = () => {
     const [addInfo,setAddInfo] = useState<HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo | null>(null)
 
     const [entryType,setEntryType] = useState<EntryType>('NOT_SELECTED')
-    console.log({
-        description,
-        date,
-        specialist,
-        diagnosis,
-        addInfo})
+
     const entryTypeOptions:{value:EntryType,label:string}[] = [
         {
             value: 'OCCUPATIONAL', label:'Occupation Healthcare Entry'
@@ -41,7 +37,7 @@ const AddEntryForm = () => {
             <label><strong style={{fontSize:'36px'}}>Description</strong></label>
             <TextField style={{width:'100%'}} variant="filled" onChange={(e) => setDescription(e.target.value)}/>
             <label><strong style={{fontSize:'36px'}}>Date</strong></label>
-            <DateCalendar onChange={(e) => console.log({e})}/>
+            <DateCalendar onChange={(e:any) => setDate(dayjs(e['$d']).format('DD-MM-YYYY'))}/>
             <label><strong style={{fontSize:'36px'}}>Specialist</strong></label>
             <TextField style={{width:'100%'}} variant="filled" onChange={(e) => setSpecialist(e.target.value)}/>
             <label><strong style={{fontSize:'36px'}}>Entry type</strong></label>
@@ -62,14 +58,23 @@ const AddEntryForm = () => {
             <DiagnosComp
             currDiagnosis={diagnosis}
             setDiagnosis={setDiagnosis}/>
-            <AdditionalInfo type={entryType} addÍnfo={addInfo} setInfo={setAddInfo}/>
-            <Button variant="contained">Add Esntry</Button>
+            <AdditionalInfo type={entryType} addInfo={addInfo} setInfo={setAddInfo}/>
+            <Button variant="contained" type="submit">Add Entry</Button>
         </form>
     )
 
     function handleSubmit(e:React.FormEvent<HTMLFormElement>){
         e.preventDefault()
-
+        const diagnosisCodes = diagnosis.map((diag) => diag.code)
+        const newEntry = {
+            id: uuidv4(),
+            description: description,
+            date: date,
+            specialist: specialist,
+            diagnosisCodes: diagnosisCodes,
+            ...addInfo
+        }
+        console.log({newEntry})
     }
 }
 
@@ -93,36 +98,60 @@ function DiagnosComp({
     return(
         <>
         <ul>
-
+            {
+                currDiagnosis.map((diagnosEntry) => {
+                    return(
+                        <Card key={uuidv4()} style={{display:'flex',justifyContent:'center',alignItems:'center',flexDirection:'column',padding:'2em'}}>
+                            <label>Name</label>
+                            <p><strong>{diagnosEntry.label}</strong></p>
+                            <label>Code</label>
+                            <p><strong>{diagnosEntry.code}</strong></p>
+                            <Button
+                            onClick={() => deleteDiagnos(diagnosEntry.code)}
+                            variant="outlined">Delete</Button>
+                        </Card>
+                    )
+                })
+            }
         </ul>
         <Autocomplete
         style={{width:'100%'}}
         renderInput={(params) => <TextField {...params} label="Diagnosis" />}
-        options={diagnosOptions} onChange={(event,value) => console.log({value})}/>
+        options={diagnosOptions} onChange={(event,value) => {
+            if(value != null) addDiagnos(value)}}/>
         </>
     )
+
+    function deleteDiagnos(code:string){
+        const newDiagnos = currDiagnosis.filter((diagnosEntry) => diagnosEntry.code != code)
+        setDiagnosis(newDiagnos)
+    }
+
+    function addDiagnos(newDiagnos:{code:string,label:string}){
+        setDiagnosis(currDiagnosis.concat(newDiagnos))
+    }
 }
 
-function AdditionalInfo({addÍnfo,setInfo,type}:{setInfo: (
+function AdditionalInfo({addInfo,setInfo,type}:{setInfo: (
     addInfo:HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo) => void,
-    addÍnfo:HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo | null,
+    addInfo:HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo | null,
     type:EntryType}){
 
     switch(type){
         case 'HOSPITAL':
-            return(<HospitalForm addÍnfo={addÍnfo} setInfo={setInfo}/>)
+            return(<HospitalForm addInfo={addInfo} setInfo={setInfo}/>)
         case 'OCCUPATIONAL':
-            return(<OccHealthEntryAddInfoForm addÍnfo={addÍnfo} setInfo={setInfo} />)
+            return(<OccHealthEntryAddInfoForm addÍnfo={addInfo} setInfo={setInfo} />)
         case 'HEALTHCHECK':
-            return(<HealthCheckAddInfoForm addÍnfo={addÍnfo} setInfo={setInfo} />)
+            return(<HealthCheckAddInfoForm addInfo={addInfo} setInfo={setInfo} />)
         default:
             return(<></>)
     }
 }
 
-function HospitalForm({addÍnfo,setInfo}:{
+function HospitalForm({addInfo,setInfo}:{
     setInfo: (addInfo:HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo) => void,
-    addÍnfo:HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo | null}){
+    addInfo:HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo | null}){
     const [dischargeDate,setDischargeDate] = useState<string>('')
     const [dischargeCriteria,setDischargeCriteria] = useState<string>('')
 
@@ -139,7 +168,9 @@ function HospitalForm({addÍnfo,setInfo}:{
             }}/>
 
         <label>Criteria</label>
-        <TextField onChange={(e) => {
+        <TextField
+        style={{width:'100%'}}
+        onChange={(e) => {
             setInfo({type:'Hospital',discharge:{criteria:dischargeCriteria,date:dischargeDate}})
             setDischargeCriteria(e.target.value)}}/>
         </>
@@ -170,7 +201,6 @@ function OccHealthEntryAddInfoForm({addÍnfo,setInfo}:{
             <DateCalendar
             onChange={(e:any) => {
             const date = dayjs(e['$d']).format('DD-MM-YYYY')
-            console.log({date})
             setSickLeaveStart(date)
             setInfo({
                 type:'OccupationalHealthcare',
@@ -184,7 +214,6 @@ function OccHealthEntryAddInfoForm({addÍnfo,setInfo}:{
             <DateCalendar
             onChange={(e:any) => {
             const date = dayjs(e['$d']).format('DD-MM-YYYY')
-            console.log({date})
             setSickLeaveEnd(date)
             setInfo({
                 type:'OccupationalHealthcare',
@@ -201,17 +230,27 @@ function OccHealthEntryAddInfoForm({addÍnfo,setInfo}:{
 
 
 
-    function HealthCheckAddInfoForm({addÍnfo,setInfo}:{
+    function HealthCheckAddInfoForm({addInfo,setInfo}:{
         setInfo: (addInfo:HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo) => void,
-        addÍnfo:HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo | null}){
+        addInfo:HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo | null}){
             return(
-                <FormGroup style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
-                    <FormControlLabel control={<Checkbox defaultChecked />} label="Healthy" onClick={() => handleCheck(0)} />
-                    <FormControlLabel control={<Checkbox />} label="Low Risk" onClick={() => handleCheck(1)} />
-                    <FormControlLabel disabled control={<Checkbox />} label="High Risk" onClick={() => handleCheck(2)} />
-                    <FormControlLabel disabled control={<Checkbox />} label="Critical Risk" onClick={() => handleCheck(3)} />
-                </FormGroup>
+                <RadioGroup style={{display:'flex',justifyContent:'center',alignItems:'center'}}>
+                    <FormControlLabel control={<Radio />} checked={isToggled(0)} label="Healthy" onClick={() => handleCheck(0)} />
+                    <FormControlLabel control={<Radio />} checked={isToggled(1)} label="Low Risk" onClick={() => handleCheck(1)} />
+                    <FormControlLabel control={<Radio />} checked={isToggled(2)} label="High Risk" onClick={() => handleCheck(2)} />
+                    <FormControlLabel control={<Radio />} checked={isToggled(3)} label="Critical Risk" onClick={() => handleCheck(3)} />
+                </RadioGroup>
             )
+
+            function isToggled(val:number){
+                if(!addInfo){
+                    if(val === 1) return true
+                    return false
+                }
+                if((addInfo as  HealthCheckAddInfo).healthCheckRating === val) return true
+                return false
+
+            }
 
             function handleCheck(newVal:number){
                 setInfo({type:'HealthCheck',healthCheckRating:newVal})

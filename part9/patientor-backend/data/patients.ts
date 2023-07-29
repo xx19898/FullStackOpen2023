@@ -120,3 +120,4 @@ export function getPatientById(id:string,patients: Patient[]):Patient{
 }
 
 export default patientsData;
+//Continue from 9.27

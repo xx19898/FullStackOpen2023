@@ -2,15 +2,15 @@
 import { v1 as uuid } from 'uuid';
 import { Gender, Patient } from '../data/types';
 
-const isString = (text: unknown): text is string => {
+export const isString = (text: unknown): text is string => {
     return typeof text === 'string' || text instanceof String;
   };
 
-  const isDate = (date: string) : boolean => {
+export const isDate = (date: string) : boolean => {
     return Boolean(Date.parse(date))
   }
 
-  const parseStringParam = (id:unknown,propertyName:string) : string => {
+export const parseStringParam = (id:unknown,propertyName:string) : string => {
     if(!id || !isString(id)){
       throw new Error(
         `incorrect or missing property ${propertyName}`
@@ -19,7 +19,7 @@ const isString = (text: unknown): text is string => {
     return id
   }
 
-  const parseDateParam = (date: unknown) => {
+export const parseDateParam = (date: unknown) => {
     if(!date || !isString(date) || !isDate(date)){
       throw new Error('Incorrect or missing date')
     }
