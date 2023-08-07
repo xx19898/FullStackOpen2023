@@ -29,8 +29,8 @@ const getPatientDetail = async (id: string) => {
   return data;
 }
 
-export async function addNewEntry(patientId:number, newEntry: Entry){
-  const {data,status} = await axios.post(`${apiBaseUrl}/api/patients/${patientId}`)
+export async function addNewEntry(patientId:string, newEntry: Entry){
+  const {data,status} = await axios.post(`${apiBaseUrl}/api/patients/${patientId}/entries`,newEntry)
   return {data,status}
 }
 

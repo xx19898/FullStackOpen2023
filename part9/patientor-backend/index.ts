@@ -43,9 +43,14 @@ app.post('/api/patients/:id',(req,res) => {
 app.post('/api/patients/:id/entries',(req,res) => {
   const userId = req.params.id
   try{
-    validateNewEntry(req.body)
-  }catch(e){
-    res.status(400).json(e)
+    const newEntry = req.body
+    if(validateNewEntry(newEntry)){
+      patientsData.find(patient => patient.id === userId)?.entries.push(newEntry)
+      res.status(200).json({addedNewEntry:req.body})
+    }
+  }catch(e:any){
+    console.log({error:e.message})
+    res.status(400).json(e.message)
   }
 })
 

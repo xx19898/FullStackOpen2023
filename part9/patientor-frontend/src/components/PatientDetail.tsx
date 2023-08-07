@@ -15,16 +15,6 @@ export const PatientDetail = () => {
     const [addEntryOpen,setAddEntryOpen] = useState<boolean>(false)
 
     useEffect(() => {
-        async function fetchData(){
-            if(patientId !== undefined){
-                const patientsData = await getPatientDetail(patientId)
-                const diagnosisData = await getDiagnosis()
-                setPatients(patientsData)
-                setDiagnosis(diagnosisData)
-            }else{
-                throw new Error('Could not extract patient id from slug param')
-            }
-        }
         fetchData()
     },[])
 
@@ -35,11 +25,23 @@ export const PatientDetail = () => {
             }
             <Button variant="contained" onClick={() => setAddEntryOpen(!addEntryOpen)}>Add new entry</Button>
             {
-                addEntryOpen && <AddEntryForm />
+                addEntryOpen && <AddEntryForm updatePatientDetail={fetchData} patientId={patientId as string}/>
             }
         </div>
 
     )
+
+
+    async function fetchData(){
+        if(patientId !== undefined){
+            const patientsData = await getPatientDetail(patientId)
+            const diagnosisData = await getDiagnosis()
+            setPatients(patientsData)
+            setDiagnosis(diagnosisData)
+        }else{
+            throw new Error('Could not extract patient id from slug param')
+        }
+    }
 
     function patientVisualisation(patient:Patient){
         return(

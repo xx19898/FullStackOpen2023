@@ -1,5 +1,5 @@
-import { Autocomplete, AutocompleteRenderInputParams, Button, Card, Checkbox, FormControlLabel, FormGroup, Radio, RadioGroup, TextField } from "@mui/material"
-import { useContext,useMemo, useState } from "react"
+import { Autocomplete, Button, Card, FormControlLabel, Radio, RadioGroup, TextField } from "@mui/material"
+import { useContext,useMemo, useState, useRef} from "react"
 import Select from 'react-select';
 import '../../App.css'
 import { v4 as uuidv4 } from 'uuid';
@@ -7,10 +7,11 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import { HealthCheckAddInfo, HospitalEntryAdditionalInfo, OccHealthEntryAddInfo } from "../../types";
 import dayjs from "dayjs";
 import { DiagContext } from "../../App";
+import { addNewEntry } from "../../services/patients";
 
 type EntryType = 'NOT_SELECTED' | 'OCCUPATIONAL' | 'HOSPITAL' | 'HEALTHCHECK'
 
-const AddEntryForm = () => {
+const AddEntryForm = ({patientId,updatePatientDetail}:{patientId:string,updatePatientDetail: () => Promise<void>}) => {
     //Base info
     const [description,setDescription] = useState('')
     const [date,setDate] = useState('')
@@ -19,6 +20,7 @@ const AddEntryForm = () => {
     const [addInfo,setAddInfo] = useState<HealthCheckAddInfo | OccHealthEntryAddInfo | HospitalEntryAdditionalInfo | null>(null)
 
     const [entryType,setEntryType] = useState<EntryType>('NOT_SELECTED')
+    const formRef = useRef<HTMLFormElement>(null)
 
     const entryTypeOptions:{value:EntryType,label:string}[] = [
         {
@@ -33,11 +35,11 @@ const AddEntryForm = () => {
     ]
 
     return(
-        <form className="add-entry-form" onSubmit={(e) => handleSubmit(e)}>
+        <form className="add-entry-form" ref={formRef} onSubmit={(e) => handleSubmit(e)}>
             <label><strong style={{fontSize:'36px'}}>Description</strong></label>
             <TextField style={{width:'100%'}} variant="filled" onChange={(e) => setDescription(e.target.value)}/>
             <label><strong style={{fontSize:'36px'}}>Date</strong></label>
-            <DateCalendar onChange={(e:any) => setDate(dayjs(e['$d']).format('DD-MM-YYYY'))}/>
+            <DateCalendar onChange={(e:any) => setDate(dayjs(e['$d']).format('YYYY-MM-DD'))}/>
             <label><strong style={{fontSize:'36px'}}>Specialist</strong></label>
             <TextField style={{width:'100%'}} variant="filled" onChange={(e) => setSpecialist(e.target.value)}/>
             <label><strong style={{fontSize:'36px'}}>Entry type</strong></label>
@@ -52,6 +54,7 @@ const AddEntryForm = () => {
             options={entryTypeOptions}
             defaultValue={{value:'NOT_SELECTED',label:'NOT SELECTED'}}
             onChange={(e) => {
+                setAddInfo(null)
                 if(e != null) setEntryType(e.value as EntryType)
             }}
             />
@@ -63,10 +66,11 @@ const AddEntryForm = () => {
         </form>
     )
 
-    function handleSubmit(e:React.FormEvent<HTMLFormElement>){
-        e.preventDefault()
-        const diagnosisCodes = diagnosis.map((diag) => diag.code)
-        const newEntry = {
+    async function handleSubmit(e:React.FormEvent<HTMLFormElement>){
+        if(addInfo != null){
+            e.preventDefault()
+            const diagnosisCodes = diagnosis.map((diag) => diag.code)
+            const newEntry = {
             id: uuidv4(),
             description: description,
             date: date,
@@ -74,9 +78,23 @@ const AddEntryForm = () => {
             diagnosisCodes: diagnosisCodes,
             ...addInfo
         }
-        console.log({newEntry})
+        try{
+            const response = await addNewEntry(patientId,newEntry)
+            if(response.status === 200) await updatePatientDetail()
+            resetForm()
+        }catch(e:any){
+            console.log({e})
+            console.log({message:e.response.data})
+        }
+    }
+
+    }
+
+    function resetForm(){
+        formRef.current?.reset()
     }
 }
+
 
 function DiagnosComp({
     setDiagnosis,
@@ -161,7 +179,7 @@ function HospitalForm({addInfo,setInfo}:{
         <label>Discharge</label>
         <DateCalendar
         onChange={(e:any) => {
-            const date = dayjs(e['$d']).format('DD-MM-YYYY')
+            const date = dayjs(e['$d']).format('YYYY-MM-DD')
             setDischargeDate(date)
             setInfo({type:'Hospital',discharge:{criteria:dischargeCriteria,date:date}})
             if(typeof e === 'string') console.log({e})
@@ -200,7 +218,7 @@ function OccHealthEntryAddInfoForm({addÍnfo,setInfo}:{
             <label>Sick leave start date</label>
             <DateCalendar
             onChange={(e:any) => {
-            const date = dayjs(e['$d']).format('DD-MM-YYYY')
+            const date = dayjs(e['$d']).format('YYYY-MM-DD')
             setSickLeaveStart(date)
             setInfo({
                 type:'OccupationalHealthcare',
@@ -213,7 +231,7 @@ function OccHealthEntryAddInfoForm({addÍnfo,setInfo}:{
             <label>Sick leave end date</label>
             <DateCalendar
             onChange={(e:any) => {
-            const date = dayjs(e['$d']).format('DD-MM-YYYY')
+            const date = dayjs(e['$d']).format('YYYY-MM-DD')
             setSickLeaveEnd(date)
             setInfo({
                 type:'OccupationalHealthcare',

@@ -1,32 +1,40 @@
-import { BaseEntry, HealthCheckEntry, HospitalEntry, OccupationalHealthcareEntry } from "../data/types";
+import {BaseEntry, Entry,} from "../data/types";
 import { isDate, isString, parseDateParam, parseStringParam } from "./patientValidation";
 
 
-export function validateNewEntry(newEntry:unknown){
+export function validateNewEntry(newEntry:unknown): newEntry is Entry{
     if(objectIsBaseEntry(newEntry) && 'type' in newEntry && typeof newEntry.type === 'string'){
         switch(newEntry.type){
             case 'HealthCheck':
                 validateHealthCheckEntry(newEntry)
+                return true
+                break
             case 'OccupationalHealthcare':
                 validateOccHealthEntry(newEntry)
+                return true
+                break
             case 'Hospital':
                 validateHospitalEntry(newEntry)
+                return true
+                break
             default:
                 throw new Error('Malformed entry')
         }
     }else{
-        throw new Error('Malformed Entry')
+
+        throw new Error('Malformed Entry - unknown type')
     }
 }
 
 function objectIsBaseEntry(entry:unknown): entry is BaseEntry{
+    console.log({entry})
     if(!(entry != undefined &&
         typeof entry === 'object' &&
         'id' in entry &&
         'description' in entry &&
         'date' in entry &&
         'specialist' in entry)) throw new Error('Malformed entry')
-
+        console.log('got here')
     parseStringParam(entry.id,'id')
     parseStringParam(entry.description,'description')
     parseDateParam(entry.date)
