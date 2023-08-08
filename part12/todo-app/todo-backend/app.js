@@ -2,6 +2,7 @@ const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
 
+
 const indexRouter = require('./routes/index');
 const todosRouter = require('./routes/todos');
 
@@ -14,5 +15,7 @@ app.use(express.json());
 
 app.use('/', indexRouter);
 app.use('/todos', todosRouter);
+
+//BACKEND_RUNNER_COMMAND: REDIS_URL=redis://localhost:6379 MONGO_URL=mongodb://the_username:the_password@localhost:3456/the_database npm run dev
 
 module.exports = app;
