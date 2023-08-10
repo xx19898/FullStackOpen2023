@@ -1,0 +1,12 @@
+services:
+  frontend_todo:
+    image: todo-frontend-img
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    command: sh -c "npm install && npm start"
+    volumes:
+      - ./:/usr/src/app
+    ports:
+      - 3001:3001
+    container_name: todo-frontend-dev
