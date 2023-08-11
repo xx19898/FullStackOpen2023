@@ -11,11 +11,11 @@ const TodoList = ({ todos, deleteTodo, completeTodo }) => {
   }
 
   return (
-    <>
+    <div style={{backgroundColor:'pink'}}>
       {todos.map(todo => {
-        <Todo todo={todo} onClickComplete={onClickComplete} onClickDelete={onClickDelete} />
+        return <Todo todo={todo} onClickComplete={onClickComplete} onClickDelete={onClickDelete} />
       }).reduce((acc, cur) => [...acc, <hr />, cur], [])}
-    </>
+    </div>
   )
 }
 

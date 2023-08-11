@@ -34,7 +34,7 @@ const TodoView = () => {
     refreshTodos()
   }
 
-  return (
+  return(
     <>
       <h1>Todos</h1>
       <Form createTodo={createTodo} />

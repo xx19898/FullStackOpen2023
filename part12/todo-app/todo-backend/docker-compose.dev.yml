@@ -1,8 +1,25 @@
 version: '3.8'
 
 services:
+  backend-todo:
+    image: backend-todo-img
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    depends_on:
+      - redis
+      - mongo
+    command: sh -c "npm install && npm start"
+    volumes:
+      - ./:/usr/src/app
+    environment:
+      - REDIS_URL=redis://redis
+      - MONGO_URL=mongodb://the_username:the_password@mongo:27017/the_database
+    ports:
+      - 3000:3000
   mongo:
     image: mongo
+    container_name: mongo
     ports:
       - 3456:27017
     environment:
@@ -13,6 +30,7 @@ services:
       - ./mongo/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
   redis:
     image: redis
+    container_name: redis
     command: ['redis-server', '--appendonly', 'yes']
     volumes:
     - ./redis_data:/data
