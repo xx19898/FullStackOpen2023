@@ -1,7 +1,7 @@
 import './App.css';
 import TodoView from './Todos/TodoView'
 
-function App() {
+function App(){
   return (
     <div className="App">
       <TodoView />
