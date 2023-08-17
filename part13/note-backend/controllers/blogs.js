@@ -9,6 +9,17 @@ router.get('/',async (req,res) => {
     res.send(blogs)
 })
 
+router.put('/:id', async (req,res) => {
+    const id = req.params.id
+    console.log({body:req.body})
+    const newLikes = req.body.likes
+    const updatedBlogs = await Blogs.update({likes:newLikes},{
+        where:{
+            id:id,
+        }})
+    res.send({updatedBlogs})
+})
+
 router.post('/', async (req,res) => {
     console.log({req})
     const body = req.body

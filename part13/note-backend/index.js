@@ -5,9 +5,8 @@ const {connectDb} = require('./util/db.js')
 const app = express()
 const blogsRouter = require('./controllers/blogs')
 
-app.use('/blogs',blogsRouter)
-
 app.use(express.json())
+app.use('/blogs',blogsRouter)
 
 const start = async () => {
     await connectDb()
