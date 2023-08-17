@@ -17,20 +17,23 @@ router.put('/:id', async (req,res) => {
         where:{
             id:id,
         }})
+    if(updatedBlogs[0] === 0) throw new Error('Blog not found')
     res.send({updatedBlogs})
 })
 
 router.post('/', async (req,res) => {
-    console.log({req})
     const body = req.body
-    console.log({body})
-    const newBlog = await Blogs.create({
-        author:body.author,
-        url:body.url,
-        title:body.title,
-        likes:body.likes
-    })
-    res.send(newBlog)
+    try{
+        const newBlog = await Blogs.create({
+            author:body.author,
+            url:body.url,
+            title:body.title,
+            likes:body.likes
+        })
+        res.send(newBlog)
+    }catch(e){
+        throw new Error('Error while creating new blog')
+    }
 })
 
 router.delete('/:id', async (req,res) => {
@@ -38,6 +41,7 @@ router.delete('/:id', async (req,res) => {
     const deletedBlog = await Blogs.destroy({where:{
         id: id
     }})
+    if(deletedBlog[0] === 0) throw new Error('Blog not found')
     res.sendStatus(200).send(deletedBlog)
 })
 
