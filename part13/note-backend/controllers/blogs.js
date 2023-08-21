@@ -1,11 +1,26 @@
 
-
+const jwt = require('jsonwebtoken')
 const router = require('express').Router()
 
-const { Blogs } = require('../models/')
+const { Blogs, Users } = require('../models/')
+const { requireAuthenticationToken } = require('../util/middleware')
+const { Op } = require('sequelize')
 
 router.get('/',async (req,res) => {
-    const blogs = await Blogs.findAll()
+    const string = req.query.search
+    console.log({string})
+    if(string){
+        const blogs = await Blogs.findAll({
+            where:{
+                title:{
+                    [Op.regexp]:"/\bwill\b/g",
+                }
+            }
+        })
+
+        res.send({blogs})
+    }
+    const blogs = await Blogs.findAll({include: Users})
     res.send(blogs)
 })
 
@@ -21,28 +36,46 @@ router.put('/:id', async (req,res) => {
     res.send({updatedBlogs})
 })
 
-router.post('/', async (req,res) => {
+router.post('/', requireAuthenticationToken, async (req,res) => {
     const body = req.body
+    const token = req.token
+
     try{
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const User = await Users.findByPk(decoded.userId)
         const newBlog = await Blogs.create({
             author:body.author,
             url:body.url,
             title:body.title,
-            likes:body.likes
+            likes:parseInt(body.likes),
+            userId: decoded.userId
         })
-        res.send(newBlog)
+        await User.addBlogs(newBlog)
+        res.status(200).send('Blog created successfully')
     }catch(e){
+        console.log({e})
         throw new Error('Error while creating new blog')
     }
 })
 
-router.delete('/:id', async (req,res) => {
-    const id = req.params.id
-    const deletedBlog = await Blogs.destroy({where:{
-        id: id
-    }})
-    if(deletedBlog[0] === 0) throw new Error('Blog not found')
-    res.sendStatus(200).send(deletedBlog)
+router.delete('/:id',requireAuthenticationToken, async (req,res) => {
+    const token = req.token
+    const blogId = req.params.id
+    try{
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const userBehindTheRequest = await Users.findByPk(decoded.userId)
+        const blogToDelete = await Blogs.findByPk(blogId,{include:Users})
+        const blogsOwnerName = blogToDelete.user.name
+        if(blogsOwnerName != userBehindTheRequest.name) throw new Error('access denied')
+        const deletedBlog = await Blogs.destroy({where:{
+            id: blogId
+        }})
+        if(deletedBlog === 0) throw new Error('Blog not found')
+        res.sendStatus(200).send(deletedBlog)
+    }catch(e){
+        throw new Error('Error when trying to delete the blog')
+    }
 })
+
 
 module.exports = router

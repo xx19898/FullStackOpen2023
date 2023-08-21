@@ -1,5 +1,12 @@
 const Blogs = require('./Blogs')
+const Users = require('./Users')
 
-Blogs.sync()
 
-module.exports = {Blogs}
+const syncModels = async () => {
+    await Users.sync()
+    await Blogs.sync()
+}
+
+syncModels()
+
+module.exports = {  Blogs, Users }

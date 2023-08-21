@@ -8,12 +8,12 @@ Blogs.init({
     id: {
         type:DataTypes.INTEGER,
         primaryKey:true,
-        autoIncrement:true
+        autoIncrement:true,
     },
     author: DataTypes.STRING,
     url: {
         type:DataTypes.STRING,
-        allowNull:false
+        allowNull:false,
     },
     title: {
         type:DataTypes.STRING,
