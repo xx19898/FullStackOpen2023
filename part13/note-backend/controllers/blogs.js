@@ -12,15 +12,24 @@ router.get('/',async (req,res) => {
     if(string){
         const blogs = await Blogs.findAll({
             where:{
-                title:{
-                    [Op.regexp]:"/\bwill\b/g",
-                }
-            }
+                [Op.or]:[{
+                    title:{[Op.iRegexp]:string}},{author:{
+                            [Op.iRegexp]:string,
+                        }},]
+            },
+            order:[
+                ['likes','DESC']
+            ]
         })
 
         res.send({blogs})
     }
-    const blogs = await Blogs.findAll({include: Users})
+    const blogs = await Blogs.findAll({
+        include: Users,
+        order:[
+            ['likes','DESC']
+        ]
+    })
     res.send(blogs)
 })
 
