@@ -3,8 +3,8 @@ const { Model, DataTypes } = require('sequelize')
 const { sequelize } = require('../util/db')
 
 const Blogs  = require('./Blogs.js')
-
-console.log({Blogs})
+const ReadingLists = require('./ReadingLists')
+const Tokens = require('./Tokens')
 
 class Users extends Model {}
 
@@ -39,5 +39,19 @@ Users.init({
 },)
 
 Users.hasMany(Blogs, {as: 'blogs', foreignKey: 'userId', onUpdate: 'CASCADE', onDelete: 'SET NULL'})
+
 Blogs.belongsTo(Users)
+
+Blogs.belongsToMany(Users,{
+    through: 'reading_lists',
+    as: 'usersWithBlogInReadList'
+})
+
+Users.belongsToMany(Blogs,{
+    through: 'reading_lists',
+    as: 'readList'
+})
+
+Users.hasMany(Tokens,{as: 'tokens',foreignKey:'userId'})
+
 module.exports = Users

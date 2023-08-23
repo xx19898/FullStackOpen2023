@@ -23,6 +23,15 @@ Blogs.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 0
+    },
+    year:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate:{
+            isCorrect(value){
+                if(parseInt(value) > 2023 || parseInt(value) < 1991) throw new Error('Incorrect year of creation')
+            }
+        }
     }
 }, {
   sequelize,

@@ -9,6 +9,7 @@ const blogsRouter = require('./controllers/blogs')
 const usersRouter = require('./controllers/users')
 const authRouter = require('./controllers/auth')
 const authorsRouter = require('./controllers/authors')
+const readingListsRouter = require('./controllers/readingLists')
 
 app.use(express.json())
 
@@ -16,9 +17,10 @@ app.use('/api/blogs',blogsRouter)
 app.use('/api/users',usersRouter)
 app.use('/api/auth',authRouter)
 app.use('/api/authors',authorsRouter)
+app.use('/api/readingList',readingListsRouter)
 
 app.use((err, req, res, next) => {
-    if (err.message === 'access denied') {
+    if (err.message === 'access denied' || err.message === 'token not found') {
         res.status(403).json({ error: err.message })
     }else if(err.message === 'Blog not found'){
         res.status(404).json({error: err.message})
@@ -30,6 +32,8 @@ app.use((err, req, res, next) => {
         res.json({error:err.message}.sendStatus(400))
     }else if(err.message === 'Invalid registration data. Remember, that username has to be valid email address.'){
         res.json({error:err.message}).sendStatus(400)
+    }else if(err.message === 'Validation error: Incorrect year of creation'){
+         res.status(400).send(err.message)
     }
 
     next(err);

@@ -45,26 +45,23 @@ router.put('/:id', async (req,res) => {
     res.send({updatedBlogs})
 })
 
-router.post('/', requireAuthenticationToken, async (req,res) => {
+router.post('/', requireAuthenticationToken, async (req,res,next) => {
     const body = req.body
     const token = req.token
+    console.log('GOT HERE')
+    const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    const User = await Users.findByPk(decoded.userId)
+    const newBlog = await Blogs.create({
+        author:body.author,
+        url:body.url,
+        title:body.title,
+        likes:parseInt(body.likes),
+        userId: decoded.userId,
+        year: body.year,
+    })
+    await User.addBlogs(newBlog)
+    res.status(200).send('Blog created successfully')
 
-    try{
-        const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        const User = await Users.findByPk(decoded.userId)
-        const newBlog = await Blogs.create({
-            author:body.author,
-            url:body.url,
-            title:body.title,
-            likes:parseInt(body.likes),
-            userId: decoded.userId
-        })
-        await User.addBlogs(newBlog)
-        res.status(200).send('Blog created successfully')
-    }catch(e){
-        console.log({e})
-        throw new Error('Error while creating new blog')
-    }
 })
 
 router.delete('/:id',requireAuthenticationToken, async (req,res) => {

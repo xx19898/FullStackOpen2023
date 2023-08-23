@@ -10,14 +10,41 @@ router.get('/', async (req,res) => {
     res.send(users)
 })
 
+router.get('/:id', async (req,res) => {
+    const isReadCrit = req.query.read
+    if(isReadCrit){
+        const user = await Users.findByPk(req.params.id,{attributes:{
+            id:true,
+            username:true,
+            name:true,
+            password:false,
+        } ,include:{model:Blogs,as: 'readList',through:{where:{
+            isRead: isReadCrit
+        },attributes:['isRead','id']}}})
+        res.send(user)
+    }else{
+        const user = await Users.findByPk(req.params.id,{attributes:{
+            id:true,
+            username:true,
+            name:true,
+            password:false,
+        } ,include:{model:Blogs,as: 'readList',through:{attributes:['isRead','id']}}})
+        res.send(user)
+    }
+})
+
 router.post('/', async ({body},res) => {
+    try{
+        const user = await Users.create({
+            username: body.username,
+            name: body.name,
+            password: body.password,
+        })
 
-    const user = await Users.create({
-        username: body.username,
-        name: body.name,
-    })
-
-    res.send(user)
+        res.send(user)
+    }catch(e){
+        console.log({e})
+    }
 })
 
 router.put('/:username', async (req,res) => {
