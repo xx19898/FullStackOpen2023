@@ -2,7 +2,6 @@ import { useState, useContext } from 'react';
 import React from 'react';
 import './App.css';
 import PropTypes from 'prop-types'
-import { AppContext } from '../../../part7/bloglist/frontendblog/src/App';
 
 const Blog = ({ blog, like, deleteBlog,addedBy,key}) => {
   const [showFullInfo, setShowFullInfo] = useState(false);
@@ -29,7 +28,7 @@ const Blog = ({ blog, like, deleteBlog,addedBy,key}) => {
           <p>Url: {blog.url}</p>
           <p>Added by: {blog.user.username}</p>
           {
-            addedBy === blog.user.username ? <button onClick={(e) => deleteBlog(blog._id)}>Delete</button> : null 
+            addedBy === blog.user.username ? <button onClick={(e) => deleteBlog(blog._id)}>Delete</button> : null
           }
         </>
       ) : null}
@@ -45,5 +44,5 @@ Blog.propTypes = {
   key: PropTypes.string.isRequired,
 }
 
-export Blog
+export default Blog
 

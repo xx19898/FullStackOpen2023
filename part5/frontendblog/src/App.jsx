@@ -7,7 +7,7 @@ import Notification from './Notification';
 
 export const BACKEND_URL = 'http://localhost:80';
 
-function App() {
+export function App() {
   const [loginState, setLoginState] = useState('inProcess');
   const [blogs, setBlogs] = useState([]);
 
@@ -139,5 +139,3 @@ function App() {
     localStorage.setItem('loggedInInfo', { username: null, token: null });
   }
 }
-
-export default App;

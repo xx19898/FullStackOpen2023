@@ -3,7 +3,7 @@ import './App.css';
 import axios from 'axios';
 import React from 'react';
 import { BACKEND_URL } from './App';
-import Blog from '../../../part7/bloglist/frontendblog/src/Blog';
+import Blog from './Blog';
 
 const UserInfo = ({ blogs, userInfo: { token, username }, refetchBlogs, showNotification }) => {
 
