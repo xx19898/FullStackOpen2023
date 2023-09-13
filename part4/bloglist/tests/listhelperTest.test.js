@@ -1,4 +1,5 @@
 const { dummy, likeCountHelper, mostBlogs, mostLikes } = require("../utils/listHelper")
+const chai = require('chai')
 
 const testBlogs = [
     {
@@ -48,37 +49,37 @@ const testBlogs = [
       url: "http://blog.cleancoder.com/uncle-bob/2016/05/01/TypeWars.html",
       likes: 2,
       __v: 0
-    }  
+    }
   ]
 
 
 describe('testing list helper functions', () => {
-    test('dummy returns one', () => {
+    it('dummy returns one', () => {
         const blogs = []
         const result = dummy(blogs)
-        expect(result).toBe(1)
+        chai.expect(result).to.equal(1)
     })
-    
-    test('likes get counted correctly',() => {
+
+    it('likes get counted correctly',() => {
         const testBlogs = [{
             likes:2
         },{
             likes:3
         }]
-    
-        const result = likeCountHelper(testBlogs)
-        expect(result).toBe(5)
-    })    
 
-    test('most blogs produces correct result',() => {
-        const result = mostBlogs(testBlogs)
-        
-        expect(result).toEqual({author:"Robert C. Martin",blogs:3})
+        const result = likeCountHelper(testBlogs)
+        chai.expect(result).to.equal(5)
     })
 
-    test('most likes produces correct result',() => {
+    it('most blogs produces correct result',() => {
+        const result = mostBlogs(testBlogs)
+
+        chai.assert.deepEqual(result,{author:"Robert C. Martin",blogs:3})
+    })
+
+    it('most likes produces correct result',() => {
         const result = mostLikes(testBlogs)
-        expect(result).toEqual({author:"Edsger W. Dijkstra",likes:17})
+        chai.assert.deepEqual(result,{author:"Edsger W. Dijkstra",likes:17})
     })
 })
 

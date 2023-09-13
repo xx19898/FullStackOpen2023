@@ -5,7 +5,6 @@ exports = {}
 async function connectDB(){
   mongoose.set('strictQuery',false)
   const theUrl = process.env.db_url
-  console.log({DB_URL:theUrl})
   await mongoose.connect(theUrl).then(() => console.log('Connected to the Database!')).catch((e) => console.log('ERROR WHILE TRYING TO CONNECT TO THE DB'))
 }
 
@@ -35,8 +34,8 @@ async function disconnectDB(){
         ref: 'Blog'
       }
     ]
-  }) 
-  
+  })
+
   const Blog = mongoose.model('Blog', blogSchema)
   const User = mongoose.model('User',userSchema)
 
@@ -47,7 +46,7 @@ async function disconnectDB(){
   function getBlogById(id){
     return Blog.find({'_id':id}).populate('user',{username:1,name:1,_id:1})
   }
-  
+
   function createBlog(newBlog){
     const blog = new Blog(newBlog)
 
@@ -68,7 +67,6 @@ async function disconnectDB(){
   }
 
   function getUserByName(name){
-    console.log({lookingForUser:name})
     return User.findOne({username:name})
   }
 
@@ -99,7 +97,7 @@ async function disconnectDB(){
     return User.find({}).populate('blogs')
   }
 
-  moduleexports = {
+  module.exports = {
     deleteBlogs,
     deleteUsers,
     getBlogs,

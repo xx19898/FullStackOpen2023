@@ -8,18 +8,12 @@ async function getUserBlogs(request, response){
  }
 
  async function createNewBlogHandler(request, response){
-   const jwtToken = request.token
-   console.log('GOT TO CREATE NEW BLOG HANDLER*****')
+   const username = request.username
    try{
-      const payload = verifyToken(jwtToken)
-      console.log({payload})
-      const username = payload.username
       const blog = request.body.blog
       const savedBlog = await addBlog(username,blog)
-      console.log('GOT TO FINISH')
       response.status(201).json(savedBlog)
    }catch(e){
-      console.log({errormessage:e.message})
       response.status(500).json(e.message)
    }
   }
@@ -31,9 +25,13 @@ async function getUserBlogs(request, response){
          const deletedBlog = await deleteBlog(user,id)
          response.status(200).json(deletedBlog)
       }catch(e){
-         response.status(500).json(e.message)
+         if(e.message === 'You do not own this blog, cant delete'){
+            response.status(400).json(e.message)
+         }else{
+            response.status(500).json({ message: 'Error when trying to delete the blog'})
+         }
       }
   }
 
 
-  module.exports = {getUserBlogs,createNewBlogHandler}
+  module.exports = {getUserBlogs,createNewBlogHandler,deleteBlogHandler}
