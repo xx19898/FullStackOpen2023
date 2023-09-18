@@ -71,7 +71,7 @@ describe('testing api functionality related to blog creation,retrieval and delet
         await deleteBlogs()
     })
 
-    it('if no token attached to blog creating request, operation is unauthorized',async () => {
+    it('if no token attached to blog creating request, operation is unauthorized', async () => {
         const createBlogResponse = await request(app)
             .post('/api/blogs',createNewBlogHandler)
             .send({blog:{title:'First Blog',author:'OtherPerson', url: 'xx', likes:15 }})
