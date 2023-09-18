@@ -44,7 +44,6 @@ async function getUsersBasicInfo(request,response){
       const savedBlog = await addBlog(username,blog)
       response.status(201).json(savedBlog)
    }catch(e){
-      console.log({errormessage:e.message})
       response.status(500).json(e.message)
    }
   }
@@ -55,7 +54,6 @@ async function getUsersBasicInfo(request,response){
       const payload = verifyToken(jwtToken)
       const username = payload.username
       let updatedBlog = request.body.blog
-      console.log({updatedBlog})
       const blogId = request.params.blogId
       updatedBlog = await findAndUpdateBlog(updatedBlog,blogId)
       response.status(200).json(updatedBlog)
@@ -66,7 +64,6 @@ async function getUsersBasicInfo(request,response){
 
   async function deleteBlogHandler(request,response){
       const user = request.username
-      console.log({user})
       const id = request.params.blogId
       const blog = await getBlogById(id)
 

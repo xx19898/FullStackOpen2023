@@ -47,10 +47,8 @@ const SingleBlogPage = () => {
   });
 
   const addCommentMutation = useMutation(addNewComment, {
-    onSuccess: ({ data }, variables) => {
-      console.log('ADDED COMMENT SUCCESS');
+    onSuccess: (variables) => {
       queryClient.invalidateQueries('blogDetailed');
-      console.log('INVALIDATED!');
 
       dispatch({
         type: 'SET_NOTIFICATION',
@@ -58,8 +56,6 @@ const SingleBlogPage = () => {
       });
     },
   });
-
-  console.log({ data });
 
   if (data === undefined || data === null) return <p>Blog data loading...</p>;
 

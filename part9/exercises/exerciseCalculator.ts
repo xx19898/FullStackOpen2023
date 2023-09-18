@@ -10,7 +10,6 @@ interface IResult{
     average: number,
 }
 function calculateExercises(target:number, trainingData: number[]): IResult{
-    console.log({trainingData,target});
     const periodLength = trainingData.length;
     const trainingDays = trainingData.reduce((acc,curr) => {
         if(curr != 0) return acc + 1;
@@ -39,7 +38,6 @@ function calculateExercises(target:number, trainingData: number[]): IResult{
         target: target,
         trainingDays: trainingDays
     };
-    console.log({result});
     return result;
 }
 

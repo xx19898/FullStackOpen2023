@@ -46,7 +46,6 @@ describe('testing api functionality related to blog creation,retrieval and delet
         .set('Authorization',`Bearer ${secondLoginResponse.body.token}`)
         .send({blogId:createdBlogId})
 
-        console.log({statusCode:deleteBlogResponse.statusCode})
         chai.expect(deleteBlogResponse.statusCode).to.equal(400)
         await deleteBlogs()
     })
@@ -66,7 +65,6 @@ describe('testing api functionality related to blog creation,retrieval and delet
         .set('Authorization',`Bearer ${firstLoginResponse.body.token}`)
         .send({blogId:createdBlogId})
 
-        console.log({statusCode:deleteBlogResponse.statusCode})
         chai.expect(deleteBlogResponse.statusCode).to.equal(200)
         await deleteBlogs()
     })

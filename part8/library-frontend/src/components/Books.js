@@ -87,7 +87,6 @@ const Books = () => {
   const cache = client.cache.readQuery({query:ALL_BOOKS,variables:{genre:chosenGenre}})
   const {data:booksData} = useQuery(ALL_BOOKS,{variables:{genre: chosenGenre},nextFetchPolicy:'cache-only'})
   useSubscription(BOOK_ADDED,{
-    onError: (error) => console.log({error}),
     onData: ({data}) => {
         updateCache(client,ALL_BOOKS,data.data.bookAdded,chosenGenre)
         client.refetchQueries([ALL_BOOKS])

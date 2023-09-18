@@ -1,7 +1,6 @@
 const {Author} = require('./AuthorSchema');
 
 async function updateAuthor(newUser, setBornTo) {
-  console.log({setBornTo, userToUpdate: newUser});
   const newUserWithoutVKey = newUser;
   delete newUserWithoutVKey['__v'];
   return await Author.findOneAndReplace({

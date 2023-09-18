@@ -12,7 +12,6 @@ describe('auth database queries work correctly', () => {
   });
   it('user gets created and queried correctly', async () => {
     const user = await getUserByUsername({username: 'testUser'});
-    console.log({user});
     expect(user.username).to.equal('testUser');
   });
 });

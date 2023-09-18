@@ -18,7 +18,6 @@ export function App() {
   const [notificationText, setNotificationText] = useState('');
 
   const loggedInInfo = loginState === 'success' ? JSON.parse(localStorage.getItem('loggedInInfo')) : null;
-  console.log({loggedInInfo})
   return (
     <div className='main'>
       {notificationActive ? <Notification text={notificationText} /> : null}

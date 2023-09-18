@@ -12,10 +12,8 @@ function App() {
   useEffect(() => {
     async function fetchCountriesData(){
         const url = `${import.meta.env.VITE_SOME_ALL_COUNTRIES_INFO_URL}`
-        console.log({url})
         try{
           const data = await axios(url)
-          console.log({data})
           setAllCountriesData(data.data)
         }catch(e){
           //pass
@@ -27,13 +25,10 @@ function App() {
   const soughtCountriesData = useMemo(() => {
     if(countryName.length === 0 || countryName === '') return []
     const searchStringLength = countryName.length
-    console.log({searchStringLength})
     return allCountriesData.filter(
       (countryData) => countryData.name.common.toLowerCase().slice(0,searchStringLength) === countryName.toLowerCase()
     )}
     ,[countryName,allCountriesData])
-
-  console.log({soughtCountriesData})
 
   if(soughtCountriesData.length === 0 || soughtCountriesData.length === 0) return(
     <div>

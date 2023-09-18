@@ -6,8 +6,6 @@ import PropTypes from 'prop-types'
 const Blog = ({ blog, like, deleteBlog,addedBy,key}) => {
   const [showFullInfo, setShowFullInfo] = useState(false);
   const { state } = useContext(AppContext)
-  console.log('BLOG')
-  console.log({tokenz:token})
   return (
     <li className='blog' key={key}>
       <button onClick={(e) => setShowFullInfo(!showFullInfo)}>

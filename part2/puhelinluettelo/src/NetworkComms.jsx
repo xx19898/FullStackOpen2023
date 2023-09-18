@@ -5,15 +5,15 @@ import { BASE_URL } from "./App";
 
 const NetworkComms = (setNotification) => {
     const [persons, setPersons] = useState([])
-    const [shouldRefetch,setShouldRefetch] = useState(true) 
-    
+    const [shouldRefetch,setShouldRefetch] = useState(true)
+
     useEffect(() => {
         if(shouldRefetch){
             const fetchData = async () => await axios.get(BASE_URL + 'persons').then(function(response){
                 setPersons(response.data)
               })
               .catch(function(err){
-                console.log(error)
+                console.log(err)
               })
               fetchData()
               setShouldRefetch(false)
@@ -24,7 +24,7 @@ const NetworkComms = (setNotification) => {
         await axios.post(BASE_URL + 'persons',{
           name: newName,
           number: newNumber,
-        }).then((response) => {
+        }).then(() => {
             setShouldRefetch(true)
             setNotification(5,`Added ${newName} to the phone book`,'PLAIN')
         }).catch((error) => {
@@ -36,7 +36,7 @@ const NetworkComms = (setNotification) => {
         await axios.put(BASE_URL + `persons/${id}`,{
                 name: name,
                 number: newNumber,
-        }).then((response) => {
+        }).then(() => {
             setShouldRefetch(true)
             setNotification(5, `Updated phone number for ${name}`,'PLAIN')
         }).catch((err) => {
@@ -45,7 +45,7 @@ const NetworkComms = (setNotification) => {
       }
 
       async function deletePerson(name,id){
-        await axios.delete(BASE_URL + 'persons/' + id,{ data:{name:name} }).then((response) => {
+        await axios.delete(BASE_URL + 'persons/' + id,{ data:{name:name} }).then(() => {
             setShouldRefetch(true)
             setNotification(5, `Deleted ${name} from the phone book`,'PLAIN')
         }).catch((err) => {

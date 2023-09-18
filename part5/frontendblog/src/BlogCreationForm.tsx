@@ -27,7 +27,6 @@ const BlogCreationForm = ({ createBlog, refetchBlogs, token, username, showNotif
               await refetchBlogs();
               setFormVisible(false);
             } else {
-              console.log(response);
               showNotification(response.data, 'failure');
             }
           }}

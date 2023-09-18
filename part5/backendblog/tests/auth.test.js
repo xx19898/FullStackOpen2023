@@ -7,14 +7,12 @@ const process = require('process')
 
 
 describe('testing that registration and authentication of newUsers works as it should',() => {
-    
+
     afterAll(async() => {
         await deleteBlogs()
-        await deleteUsers() 
-        //await disconnectDB()
-        console.log('FINISHED WITH AUTH TESTS')
+        await deleteUsers()
     })
-    
+
     beforeAll(async () => {
         await connectDB()
     })

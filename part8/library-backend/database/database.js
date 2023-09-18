@@ -7,14 +7,8 @@ const {deleteAllBooks} = require('./booksRepository');
 
 require('dotenv').config();
 
-const MONGODB_URL = process.env.DB_URL;
-
-console.log('connecting to', MONGODB_URL);
-
 async function connectDB() {
   const URL = process.env.DB_URL;
-  console.log({URL});
-  console.log('started connecting');
   await mongoose.connect(URL).then(() => {
     console.log('connected to MongoDB');
   }).catch((e) => {

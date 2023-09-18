@@ -3,25 +3,19 @@ import './App.css'
 import axios from 'axios'
 
 const Country = ({name,flagUrl,capital,area,languages}) => {
-    console.log({languages})
     const langsParsed = Object.entries(languages).map(array => array[1])
     const [weatherData,setWeatherData] = useState(undefined)
-    console.log({weatherData})
 
     useEffect(() => {
         async function fetchWeatherData(){
             const coordinatesUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${capital}&limit=1&appid=${import.meta.env.VITE_SOME_OPEN_WEATHER_KEY}`
-            console.log({coordinatesUrl})
             const coordinatesData = await axios(coordinatesUrl)
-            console.log({coordinatesData})
             const lat = coordinatesData.data[0].lat
             const lon = coordinatesData.data[0].lon
             const weatherDataUrl = `https://api.openweathermap.org/data/3.0/onecall?units=metric&lat=${lat}&lon=${lon}&appid=${import.meta.env.VITE_SOME_OPEN_WEATHER_KEY}`
-            console.log({weatherDataUrl})
             const weatherData = await axios(weatherDataUrl)
             setWeatherData(weatherData.data)
         }
-        console.log('FETCHING WEATHER DATA')
         fetchWeatherData()
     },[])
 

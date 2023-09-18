@@ -31,13 +31,10 @@ app.post('/api/tests/reset',async (req,res) => {
 
 const PORT = 80
 
-console.log(`ENVIRONMENT IS ${process.env.NODE_ENV}`)
-
 if(process.env.NODE_ENV !== 'test'){
   app.listen(PORT, async () => {
     connectDB()
-    console.log(`Server running on port ${PORT}`)
   })
 }
 
-module.exports = { app } 
+module.exports = { app }

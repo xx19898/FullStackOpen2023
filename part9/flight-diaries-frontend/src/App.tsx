@@ -28,14 +28,12 @@ function App() {
     if(shouldUpdateDiaries){
       const fetchData = async () => {
         const {data} = await getDiaries()
-        console.log({NEW_DIARIES:data})
         setDiaries(data)
       }
       fetchData()
       setShouldUpdateDiaries(false)
       }
     },[shouldUpdateDiaries])
-    console.log({diaries})
   return (
     <>
     {

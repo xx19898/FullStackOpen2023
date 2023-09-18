@@ -6,7 +6,6 @@ const process = require('process')
 async function connectDB(){
   mongoose.set('strictQuery',false)
   const theUrl = process.env.db_url
-  console.log({DB_URL:theUrl})
   await mongoose.connect(theUrl).then(() => console.log('Connected to the Database!')).catch((e) => console.log('ERROR WHILE TRYING TO CONNECT TO THE DB'))
 }
 
@@ -31,7 +30,7 @@ async function disconnectDB(){
         }
       ]
     })
-  
+
   const commentSchema = mongoose.Schema({
     text: String,
     blog:{
@@ -50,8 +49,8 @@ async function disconnectDB(){
         ref: 'Blog'
       }
     ],
-  }) 
-  
+  })
+
   const Blog = mongoose.model('Blog', blogSchema)
   const User = mongoose.model('User',userSchema)
   const Comment = mongoose.model('Comment',commentSchema)
@@ -71,7 +70,7 @@ async function disconnectDB(){
   function getBlogById(id){
     return Blog.findOne({'_id':id}).populate({path:'user',select:{username:1,name:1,_id:1}}).populate({path: 'comments',select:{text:1,_id:1}})
   }
-  
+
   function createBlog(newBlog){
     const blog = new Blog(newBlog)
 
@@ -91,7 +90,6 @@ async function disconnectDB(){
   }
 
   function getUserByName(name){
-    console.log({lookingForUser:name})
     return User.findOne({username:name})
   }
 
@@ -131,7 +129,7 @@ async function disconnectDB(){
     const blog = await getBlogById(blogId)
     if(blog.comments === undefined) blog.comments = [newComment._id]
     else{
-      blog.comments = blog.comments.concat(newComment._id) 
+      blog.comments = blog.comments.concat(newComment._id)
     }
     const updatedBlog = blog.save()
     return updatedBlog

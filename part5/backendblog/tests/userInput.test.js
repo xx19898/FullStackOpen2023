@@ -10,7 +10,6 @@ describe('testing that validation of user input when trying to login is correct'
     })
 
     afterAll(async () => {
-        //await disconnectDB()
         console.log('finished')
     })
 
@@ -19,7 +18,7 @@ describe('testing that validation of user input when trying to login is correct'
         expect(response.statusCode).toBe(400)
     })
 
-    
+
     test('server should not accept userdata with no password',async () => {
         const response = await request(app).post('/api/users/login').send({username:'xesewr'})
         expect(response.statusCode).toBe(400)
@@ -32,5 +31,5 @@ describe('testing that validation of user input when trying to login is correct'
         const response = await request(app).post('/api/users/login').send({username:'x',password:'xdsssdf'})
         expect(response.statusCode).toBe(400)
     })
-    
+
 })

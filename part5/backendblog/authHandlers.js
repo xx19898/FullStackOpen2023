@@ -5,7 +5,6 @@ module.exports = {}
 
 async function createNewUserHandler(request,response){
     const err = await validateUserDataForRegistering(request.body)
-    console.log({err})
     if(err.error != undefined) response.status(400).json(err.error)
     else{
         const user = request.body
@@ -15,7 +14,7 @@ async function createNewUserHandler(request,response){
         }catch(error){
         response.status(500).json(error.message)
         }
-    }    
+    }
 }
 
     async function loginUserHandler(request,response){
@@ -37,7 +36,7 @@ async function createNewUserHandler(request,response){
                 }
 
             const token = jwt.sign(userForToken, process.env.JWT_SECRET)
-        
+
 
             response.status(200).send({token:token, username: user.username, name: user.name})
     }}

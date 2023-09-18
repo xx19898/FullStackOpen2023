@@ -32,12 +32,10 @@ const resolvers = {
       return authors.length;
     },
     allBooks: async (root, {genre}) => {
-      console.log({genre});
       if (genre === 'All') return await getAllBooks();
       return await getAllBooks(genre);
     },
     allAuthors: async (root, {authorName}) => {
-      console.log({authorName});
       const authors = await getAllAuthors();
       const soughtAuthors = authorName ?
       [authors.find((author) => author.name = authorName)] : authors;
@@ -79,7 +77,6 @@ const resolvers = {
         authorName: authorName,
         genres: genres,
       });
-      console.log({createdBook});
       pubsub.publish('BOOK_ADDED', {bookAdded: createdBook});
       return createdBook;
     },
@@ -93,7 +90,6 @@ const resolvers = {
     editAuthor: async (root, {name, setBornTo}, contextValue) => {
       authorizeUser(contextValue.authority);
       const user = await Author.findOne({name: name});
-      console.log({user, setBornTo});
       return updateAuthor(user, setBornTo);
     },
     login: async (root, {username, password}) => {

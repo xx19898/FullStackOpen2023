@@ -17,11 +17,9 @@ const useField = (type) => {
 
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
-  console.log({name})
   useEffect(() => {
     async function fetch(){
       const response =  await axios.get(`https://studies.cs.helsinki.fi/restcountries/api/name/${name}`)
-      console.log({...response.data})
       setCountry({data:response.data,found:true})
       return response
     }
@@ -34,7 +32,6 @@ const useCountry = (name) => {
 }
 
 const Country = ({ country }) => {
-  console.log({country})
   if (!country) {
     return null
   }
@@ -51,8 +48,8 @@ const Country = ({ country }) => {
     <div>
       <h3>{country.data.name.common} </h3>
       <div>capital {country.data.capital} </div>
-      <div>population {country.data.population}</div> 
-      <img src={country.data.flags['svg']} height='100' alt={`flag of ${country.data.name}`}/>  
+      <div>population {country.data.population}</div>
+      <img src={country.data.flags['svg']} height='100' alt={`flag of ${country.data.name}`}/>
     </div>
   )
 }

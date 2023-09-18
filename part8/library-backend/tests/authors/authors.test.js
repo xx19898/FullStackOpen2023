@@ -23,7 +23,7 @@ describe('authors related api functions correctly', (done) => {
     });
 
 
-    // eslint-disable-next-line no-multi-str
+    // eslint-disable-next-line max-len
     const loginMutationString = `mutation login($username: String!, $password: String!){ login(username: $username, password: $password){token}}`;
     const response = await testServer.executeOperation({
       query: loginMutationString,

@@ -9,20 +9,16 @@ async function getUserBlogs(request, response){
 
  async function createNewBlogHandler(request, response){
    const jwtToken = request.token
-   console.log('GOT TO CREATE NEW BLOG HANDLER*****')
    try{
       const payload = verifyToken(jwtToken)
-      console.log({payload})
       const username = payload.username
       let blog = request.body.blog
       if(blog.likes === undefined){
          blog = {...blog,likes:0}
       }
       const savedBlog = await addBlog(username,blog)
-      console.log('GOT TO FINISH')
       response.status(201).json(savedBlog)
    }catch(e){
-      console.log({errormessage:e.message})
       response.status(500).json(e.message)
    }
   }
@@ -35,10 +31,8 @@ async function getUserBlogs(request, response){
       let updatedBlog = request.body.blog
       const blogId = request.params.blogId
       updatedBlog = await findAndUpdateBlog(updatedBlog,blogId)
-      console.log({updatedBlog})
       response.status(200).json(updatedBlog)
    }catch(e){
-      console.log({errormessage:e.message})
       response.status(500).json(e.message)
    }
   }

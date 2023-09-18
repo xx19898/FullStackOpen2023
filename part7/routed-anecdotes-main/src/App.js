@@ -48,7 +48,7 @@ const Footer = () => (
 
 const CreateNew = (props) => {
   const navigate = useNavigate()
-  
+
   const {reset:contentReset,type:contentType,value:contentValue,onChange:contentOnChange} = useField('text')
   const {reset:authorReset,type:authorType,value:authorValue,onChange:authorOnChange} = useField('text')
   const {reset:infoReset,type:infoType,value:infoValue,onChange:infoOnChange} = useField('text')
@@ -68,7 +68,7 @@ const CreateNew = (props) => {
     })
     navigate('/anecdotes')
   }
-  
+
   return (
     <div>
       <h2>create a new anecdote</h2>
@@ -96,7 +96,6 @@ const CreateNew = (props) => {
 const Anecdote = ({anecdotes}) => {
     const params = useParams()
     const anecdote = anecdotes[params.index]
-    console.log({index:anecdote})
     return(
       <p><strong>{anecdote.content}</strong></p>
     )
@@ -128,7 +127,7 @@ const App = () => {
     }
   ])
 
-  
+
 
   const addNew = (anecdote) => {
     anecdote.id = Math.round(Math.random() * 10000)

@@ -38,8 +38,6 @@ export const BlogSection = () => {
     },
   });
 
-  console.log({ data });
-
   const blogs = useMemo(() => {
     if (blogsData === undefined || blogsData.length === 0) return [];
     else {
@@ -48,8 +46,6 @@ export const BlogSection = () => {
       });
     }
   }, [blogsData]);
-
-  console.log({ blogs });
 
   return (
     <>
