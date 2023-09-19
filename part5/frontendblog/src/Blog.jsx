@@ -3,11 +3,10 @@ import React from 'react';
 import './App.css';
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, like, deleteBlog,addedBy,key}) => {
+const Blog = ({ blog, like, deleteBlog,addedBy,token }) => {
   const [showFullInfo, setShowFullInfo] = useState(false);
-  const { state } = useContext(AppContext)
   return (
-    <li className='blog' key={key}>
+    <li className='blog'>
       <button onClick={(e) => setShowFullInfo(!showFullInfo)}>
         {showFullInfo ? 'Hide' : 'View'}
       </button>
@@ -18,7 +17,7 @@ const Blog = ({ blog, like, deleteBlog,addedBy,key}) => {
           <p>Likes: {blog.likes === undefined ? 0 : blog.likes}</p>
           <button
             onClick={() =>
-              like({blogId:blog._id,blog: {...blog, likes: blog.likes === undefined ? 1 : blog.likes + 1 },token:token})
+              like(blog._id,{...blog, likes: blog.likes === undefined ? 1 : blog.likes + 1 },token)
             }
           >
             Like
@@ -26,7 +25,7 @@ const Blog = ({ blog, like, deleteBlog,addedBy,key}) => {
           <p>Url: {blog.url}</p>
           <p>Added by: {blog.user.username}</p>
           {
-            addedBy === blog.user.username ? <button onClick={(e) => deleteBlog(blog._id)}>Delete</button> : null
+            addedBy === blog.user.username ? <button onClick={(e) => deleteBlog(blog._id,token)}>Delete</button> : null
           }
         </>
       ) : null}
@@ -39,7 +38,7 @@ Blog.propTypes = {
   like: PropTypes.func.isRequired,
   deleteBlog: PropTypes.func.isRequired,
   addedBy: PropTypes.string.isRequired,
-  key: PropTypes.string.isRequired,
+  token: PropTypes.string.isRequired,
 }
 
 export default Blog

@@ -10,6 +10,7 @@ const { tokenValidator, userExtractor } = require('./middleware')
 app.use(cors({
   origin: '*'
 }))
+
 app.use(express.json())
 app.use('/api/blogs',tokenValidator,userExtractor)
 

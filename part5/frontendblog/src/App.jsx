@@ -8,6 +8,7 @@ import Notification from './Notification';
 export const BACKEND_URL = 'http://localhost:80';
 
 export function App() {
+
   const [loginState, setLoginState] = useState('inProcess');
   const [blogs, setBlogs] = useState([]);
 
@@ -18,6 +19,7 @@ export function App() {
   const [notificationText, setNotificationText] = useState('');
 
   const loggedInInfo = loginState === 'success' ? JSON.parse(localStorage.getItem('loggedInInfo')) : null;
+
   return (
     <div className='main'>
       {notificationActive ? <Notification text={notificationText} /> : null}
@@ -66,7 +68,7 @@ export function App() {
     try {
       const response = await signIn(username, password);
       if (response.status === 200) {
-        const blogs = await getBlogs(response.data.user, response.data.token);
+        const blogs = await getBlogs(response.data.token);
         setBlogs(blogs);
         setLoginState('success');
         localStorage.setItem(
@@ -93,12 +95,12 @@ export function App() {
     return response;
   }
 
-  async function refetchBlogs(){
-    const response = await getBlogs(loggedInInfo.username, loggedInInfo.token);
+  async function refetchBlogs(authToken){
+    const response = await getBlogs(authToken);
     setBlogs(response);
   }
 
-  async function getBlogs(username, token) {
+  async function getBlogs(token) {
     const response = await axios({
       method: 'get',
       url: `${BACKEND_URL}/api/blogs`,
@@ -137,4 +139,12 @@ export function App() {
     setPassword('');
     localStorage.setItem('loggedInInfo', { username: null, token: null });
   }
+}
+
+
+export function getUserInfo(){
+  const userInfo = localStorage.getItem(
+    'loggedInInfo'
+  );
+  return userInfo
 }

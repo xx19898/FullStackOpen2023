@@ -25,37 +25,37 @@ const UserInfo = ({ blogs, userInfo: { token, username }, refetchBlogs, showNoti
       ) : (
         <ul className='blog-list'>
           {sortedBlogs.map((blog) => {
-            return <Blog blog={blog} addedBy={username} like={like} deleteBlog={deleteBlog} key={blog._id} />
+            return <Blog blog={blog} addedBy={username} like={like} deleteBlog={deleteBlog} key={blog._id} token={token} />
           })}
         </ul>
       )}
     </div>
   );
 
-  async function like(blogId, blog) {
+  async function like(blogId, blog,authToken) {
     const response = await axios({
       url: `${BACKEND_URL}/api/blogs/${blogId}`,
       method: 'put',
       data: { blog },
       withCredentials: false,
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${authToken}` },
     });
     if (response.status === 200) {
-      await refetchBlogs();
+      await refetchBlogs(authToken);
     } else {
       showNotification('Could not like');
     }
   }
 
-  async function deleteBlog(blogId) {
+  async function deleteBlog(blogId,authToken) {
     const response = await axios({
       url: `${BACKEND_URL}/api/blogs/${blogId}`,
       method: 'delete',
       withCredentials: false,
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${authToken}` },
     });
     if (response.status === 200) {
-      await refetchBlogs();
+      await refetchBlogs(authToken);
       showNotification(`Deleted blog with id ${blogId}`);
     } else {
       showNotification('Could not delete');

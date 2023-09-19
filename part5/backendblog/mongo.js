@@ -6,6 +6,7 @@ const process = require('process')
 async function connectDB(){
   mongoose.set('strictQuery',false)
   const theUrl = process.env.db_url
+  console.log('Connecting to the DB')
   await mongoose.connect(theUrl).then(() => console.log('Connected to the Database!')).catch((e) => console.log('ERROR WHILE TRYING TO CONNECT TO THE DB'))
 }
 

@@ -24,7 +24,7 @@ const BlogCreationForm = ({ createBlog, refetchBlogs, token, username, showNotif
             });
             if (response.status === 201) {
               showNotification(`Successfully added ${title} to the blog list`, 'success');
-              await refetchBlogs();
+              await refetchBlogs(token);
               setFormVisible(false);
             } else {
               showNotification(response.data, 'failure');
@@ -32,11 +32,11 @@ const BlogCreationForm = ({ createBlog, refetchBlogs, token, username, showNotif
           }}
           className='blog-creation-form'
         >
-          <label htmlFor="title" className='label'>Title</label>
+          <label htmlFor="titleInput" className='label'>Title</label>
           <input id="titleInput" onChange={(e) => setTitle(e.target.value)} className='input'></input>
-          <label htmlFor="author" className='label'>Author</label>
+          <label htmlFor="authorInput" className='label'>Author</label>
           <input id="authorInput" onChange={(e) => setAuthor(e.target.value)} className='input'></input>
-          <label htmlFor="url" className='label'>Url</label>
+          <label htmlFor="urlInput" className='label'>Url</label>
           <input id="urlInput" onChange={(e) => setUrl(e.target.value)} className='input'></input>
           <button>Create Blog</button>
         </form>
